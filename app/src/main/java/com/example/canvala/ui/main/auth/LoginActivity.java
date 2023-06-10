@@ -42,6 +42,14 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
 
+        if (sharedPreferences.getBoolean(Constants.SHARED_PREF_LOGGED, false)) {
+            if (sharedPreferences.getString(Constants.SHARED_PREF_ROLE, null).equals("USER")) {
+                startActivity(new Intent(LoginActivity.this, UserMainActivity.class));
+                finish();
+
+            }
+        }
+
         listener();
     }
 
@@ -70,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<AuthModel> call, Response<AuthModel> response) {
                 if (response.isSuccessful() && response.body().getStatus() == 200) {
 
-                    editor.putBoolean(Constants.SHARED_PREF_LOGGED, false);
+                    editor.putBoolean(Constants.SHARED_PREF_LOGGED, true);
                     editor.putString(Constants.SHARED_PREF_USER_ID, response.body().getUserId());
                     editor.putString(Constants.SHARED_PREF_ROLE, response.body().getRole());
                     editor.apply();
