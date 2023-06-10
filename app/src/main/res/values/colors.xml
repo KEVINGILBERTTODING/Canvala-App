@@ -4,4 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="black2">#464646</color>
     <color name="main">#4CAF50</color>
+    <color name="main_ligh">#C9E7CB</color>
+
+
 </resources>
