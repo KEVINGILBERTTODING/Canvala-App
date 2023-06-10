@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.canvala.R;
 import com.example.canvala.data.api.ApiConfig;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText etEmail, etPassword;
     Button btnLogin;
     AuthService authService;
+    TextView tvDaftar;
     AlertDialog progressDialog;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -41,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        tvDaftar = findViewById(R.id.tvDaftar);
 
         if (sharedPreferences.getBoolean(Constants.SHARED_PREF_LOGGED, false)) {
             if (sharedPreferences.getString(Constants.SHARED_PREF_ROLE, null).equals("USER")) {
@@ -69,6 +72,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        tvDaftar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+
+            }
+        });
     }
 
     private void login() {
