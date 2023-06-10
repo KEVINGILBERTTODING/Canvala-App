@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import com.example.canvala.databinding.FragmentUserHomeBinding;
 import com.example.canvala.ui.main.auth.LoginActivity;
 import com.example.canvala.ui.main.user.adapter.ProductAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -56,6 +58,18 @@ public class UserHomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getAllProduct();
+        binding.searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                return false;
+            }
+        });
     }
 
     private void getAllProduct() {
@@ -84,6 +98,23 @@ public class UserHomeFragment extends Fragment {
             }
         });
 
+
+    }
+
+    private void filter(String text) {
+        ArrayList<ProductModel> filteredList = new ArrayList<>();
+        for (ProductModel item : productModelList) {
+            if (item.getProduct_name().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(item);
+            }
+
+            productAdapter.filter(filteredList);
+            if (filteredList.isEmpty()) {
+
+            }else {
+                productAdapter.filter(filteredList);
+            }
+        }
 
     }
 

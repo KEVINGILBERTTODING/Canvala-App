@@ -7,10 +7,22 @@
         android:icon="@drawable/baseline_home_24"
         android:title="Home"/>
 
+    <item
+        android:id="@+id/menuProduct"
+        android:icon="@drawable/baseline_layers_24"
+        android:title="Produk"/>
+
+    <item
+        android:id="@+id/menuTransaksi"
+        android:icon="@drawable/baseline_history_24"
+        android:title="transaksi"/>
+
+
+
 
 
     <item
         android:id="@+id/menuProfile"
         android:icon="@drawable/baseline_person_24"
-        android:title="Profil"/>
+        android:title="Saya"/>
 </menu>

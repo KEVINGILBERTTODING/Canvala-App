@@ -16,6 +16,7 @@ import com.example.canvala.R;
 import com.example.canvala.data.model.ProductModel;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
@@ -39,8 +40,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.tvNamaProduct.setText(productModelList.get(holder.getAdapterPosition()).getProduct_name());
         // Decimal Format rupiah
         DecimalFormat decimalFormat = new DecimalFormat("#,##0");
-        String price = decimalFormat.format(Integer.parseInt(productModelList.get(holder.getAdapterPosition()).getPrice()));
+        String price = decimalFormat.format(productModelList.get(holder.getAdapterPosition()).getPrice());
         holder.tvHarga.setText("Rp. " + price);
+
+        holder.tvStock.setText(productModelList.get(holder.getAdapterPosition()).getStock() + " Stock");
 
         Glide.with(context)
                 .load(productModelList.get(holder.getAdapterPosition()).getPhotos())
@@ -57,14 +60,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return productModelList.size();
     }
 
+    public void filter(ArrayList<ProductModel> filteredList) {
+        productModelList = filteredList;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvNamaProduct, tvHarga;
+        TextView tvNamaProduct, tvHarga, tvStock;
         ImageView ivProduct;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNamaProduct = itemView.findViewById(R.id.tvNamaProduct);
             tvHarga = itemView.findViewById(R.id.tvHarga);
             ivProduct = itemView.findViewById(R.id.ivProduct);
+            tvStock = itemView.findViewById(R.id.tvStock);
         }
     }
 }

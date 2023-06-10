@@ -51,12 +51,24 @@
                 android:fontFamily="@font/popsem"
                 android:textColor="@color/main"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4000 Stock"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/black2"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_gravity="end"
+                android:id="@+id/tvStock"
+                android:fontFamily="@font/popmed"
+                android:textSize="@dimen/_9ssp"/>
+
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 app:icon="@drawable/baseline_shopping_cart_24"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
-                android:text="keranjang"
+                android:text="Keranjang"
                 app:cornerRadius="@dimen/_5sdp"/>
 
 

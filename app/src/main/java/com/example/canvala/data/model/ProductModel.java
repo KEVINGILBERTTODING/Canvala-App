@@ -16,7 +16,7 @@ public class ProductModel implements Serializable {
     private String unit;
 
     @SerializedName("price")
-    private String price;
+    private Integer price;
 
     @SerializedName("descriptions")
     private String descriptions;
@@ -25,7 +25,7 @@ public class ProductModel implements Serializable {
     private String category_id;
 
     @SerializedName("stock")
-    private String stock;
+    private Integer stock;
 
     @SerializedName("id_gallery")
     private String id_gallery;
@@ -36,7 +36,7 @@ public class ProductModel implements Serializable {
     @SerializedName("product_id")
     private String product_id;
 
-    public ProductModel(String id_product, String product_name, String unit, String price, String descriptions, String category_id, String stock, String id_gallery, String photos, String product_id) {
+    public ProductModel(String id_product, String product_name, String unit, Integer price, String descriptions, String category_id, Integer stock, String id_gallery, String photos, String product_id) {
         this.id_product = id_product;
         this.product_name = product_name;
         this.unit = unit;
@@ -73,11 +73,11 @@ public class ProductModel implements Serializable {
         this.unit = unit;
     }
 
-    public String getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -97,11 +97,11 @@ public class ProductModel implements Serializable {
         this.category_id = category_id;
     }
 
-    public String getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(String stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
