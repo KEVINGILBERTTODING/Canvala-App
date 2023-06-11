@@ -26,6 +26,7 @@ import com.example.canvala.data.model.CartModel;
 import com.example.canvala.data.model.InformationModel;
 import com.example.canvala.data.model.ProductModel;
 import com.example.canvala.data.model.RekeningModel;
+import com.example.canvala.data.model.ResponseModel;
 import com.example.canvala.data.model.UserModel;
 import com.example.canvala.databinding.FragmentCartBinding;
 import com.example.canvala.ui.main.user.adapter.CartAdapter;
@@ -141,6 +142,23 @@ public class CartFragment extends Fragment implements CartAdapter.OnButtonClickL
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
+            }
+        });
+        binding.btnSimpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (binding.etAlamat.getText().toString().isEmpty()) {
+                    binding.etAlamat.setError("Alamat tidak boleh kosong");
+                    binding.etAlamat.requestFocus();
+                }else if (binding.etTelepon.getText().toString().isEmpty()) {
+                    binding.etTelepon.setError("Telepon tidak boleh kosong");
+                    binding.etTelepon.requestFocus();
+                }else if (binding.etKodePos.getText().toString().isEmpty()) {
+                    binding.etKodePos.setError("Kode Pos tidak boleh kosong");
+                    binding.etKodePos.requestFocus();
+                }else {
+                    updateAlamat();
+                }
             }
         });
     }
@@ -334,5 +352,35 @@ public class CartFragment extends Fragment implements CartAdapter.OnButtonClickL
     @Override
     public void onButtonClicked() {
         getCart();
+    }
+
+    private void updateAlamat() {
+        showProgressBar("Loading", "Menyimpan perubahan...", true);
+        userService.updateAlamat(
+                userId,
+                binding.etAlamat.getText().toString(),
+                binding.etTelepon.getText().toString(),
+                binding.etKodePos.getText().toString()
+        ).enqueue(new Callback<ResponseModel>() {
+            @Override
+            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                if (response.isSuccessful() && response.body().getStatus() == 200) {
+                    showProgressBar("sd", "Sds", false);
+                    showToast("success", "Berhasil mengubah alamat");
+                    getProfile();
+
+                }else {
+                    showProgressBar("sd", "Sds", false);
+                    showToast("error", "Terjadi kesalahan");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel> call, Throwable t) {
+                showProgressBar("sd", "Sds", false);
+                showToast("error", "Tidak ada koneksi internet");
+
+            }
+        });
     }
 }

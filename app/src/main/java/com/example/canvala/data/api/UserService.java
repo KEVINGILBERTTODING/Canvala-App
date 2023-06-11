@@ -66,4 +66,13 @@ public interface UserService {
     Call<InformationModel> getInformationOrder(
             @Field("user_id") String userId
     );
+
+    @FormUrlEncoded
+    @POST("user/updateAlamat")
+    Call<ResponseModel> updateAlamat(
+            @Field("user_id") String userId,
+            @Field("address") String address,
+            @Field("phone_number") String phoneNumber,
+            @Field("postal_code") String postalCode
+    );
 }
