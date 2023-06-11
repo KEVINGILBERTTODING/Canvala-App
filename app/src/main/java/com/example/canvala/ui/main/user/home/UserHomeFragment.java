@@ -36,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserHomeFragment extends Fragment {
+public class UserHomeFragment extends Fragment implements ProductAdapter.OnButtonClickListener {
 
     private FragmentUserHomeBinding binding;
     List<ProductModel> productModelList;
@@ -57,6 +57,7 @@ public class UserHomeFragment extends Fragment {
         sharedPreferences = getContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         userService = ApiConfig.getClient().create(UserService.class);
         userId = sharedPreferences.getString(Constants.SHARED_PREF_USER_ID, null);
+
 
 
 
@@ -104,6 +105,7 @@ public class UserHomeFragment extends Fragment {
                     productAdapter = new ProductAdapter(getContext(), productModelList);
                     gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
                     binding.rvProduct.setLayoutManager(gridLayoutManager);
+                    productAdapter.setOnButtonClickListener(UserHomeFragment.this);
                     binding.rvProduct.setAdapter(productAdapter);
                     binding.rvProduct.setHasFixedSize(true);
                     showProgressBar("sdd", "dsd", false);
@@ -163,7 +165,7 @@ public class UserHomeFragment extends Fragment {
     }
 
 
-    private void getTotalCart() {
+    public void getTotalCart() {
         showProgressBar("Loading", "Memuat data...", true);
         userService.getMyCart(userId).enqueue(new Callback<List<CartModel>>() {
             @Override
@@ -218,5 +220,11 @@ public class UserHomeFragment extends Fragment {
     private void replace(Fragment fragment) {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frameUsers, fragment).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onButtonClicked() {
+        getTotalCart();
+
     }
 }

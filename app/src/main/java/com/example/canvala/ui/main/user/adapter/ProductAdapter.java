@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import com.example.canvala.R;
 import com.example.canvala.data.api.ApiConfig;
 import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.ProductModel;
+import com.example.canvala.data.model.ResponseModel;
+import com.example.canvala.ui.main.user.home.UserHomeFragment;
 import com.example.canvala.ui.main.user.product.DetailProductFragment;
 import com.example.canvala.util.Constants;
 
@@ -36,7 +39,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.Field;
+
+
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
     Context context;
@@ -45,6 +53,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private String userId;
     private AlertDialog progressDialog;
     private UserService userService;
+
+
+
+    private OnButtonClickListener onButtonClickListener;
+
+
+    public void setOnButtonClickListener(OnButtonClickListener listener) {
+        this.onButtonClickListener = listener;
+    }
+
 
     public ProductAdapter(Context context, List<ProductModel> productModelList) {
         this.context = context;
@@ -77,6 +95,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 .centerInside()
                 .skipMemoryCache(true)
                 .into(holder.ivProduct);
+
+
 
     }
 
@@ -174,6 +194,48 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                         }
                     });
 
+                    btnMasukkan.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            showProgressBar("Loading", "Memeriksa stok product...", true);
+                            userService.addProductToCart(
+                                    Integer.parseInt(etQty.getText().toString()),
+                                    userId,
+                                    productModelList.get(getAdapterPosition()).getProduct_id()
+                            ).enqueue(new Callback<ResponseModel>() {
+                                @Override
+                                public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+
+                                    if (response.isSuccessful() && response.body().getStatus() == 200) {
+                                        showProgressBar("dssd", "sds", false);
+                                        Integer stockSesudah = Integer.parseInt(etQty.getText().toString());
+                                        Integer stokSebelum = productModelList.get(getAdapterPosition()).getStock();
+                                        Integer sisaSaldo = stokSebelum - stockSesudah;
+                                        Log.d("sisa saldo", "onResponse: " + sisaSaldo);
+                                        productModelList.get(getAdapterPosition()).setStock(sisaSaldo);
+                                        dialog.dismiss();
+                                        if (onButtonClickListener != null) {
+                                            onButtonClickListener.onButtonClicked();
+                                        }
+                                        showToast("success", "Produk berhasil ditambahkan");
+                                    }else {
+                                        showToast("error", response.body().getMessage());
+                                        showProgressBar("sdd", "Sdsd", false);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseModel> call, Throwable t) {
+                                    showToast("error", "Tidak ada koneksi internet");
+                                    showProgressBar("sdd", "Sdsd", false);
+
+                                }
+                            });
+                        }
+                    });
+
 
 
 
@@ -198,6 +260,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frameUsers, fragment).addToBackStack(null).commit();
         }
+
+
     }
 
 
@@ -225,6 +289,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         }else {
             Toasty.error(context, text, Toasty.LENGTH_SHORT).show();
         }
+    }
+
+    public interface OnButtonClickListener {
+        void onButtonClicked();
     }
 
 
