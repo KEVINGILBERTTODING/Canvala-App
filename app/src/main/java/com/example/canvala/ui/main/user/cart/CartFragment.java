@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -18,10 +19,12 @@ import com.example.canvala.R;
 import com.example.canvala.data.api.ApiConfig;
 import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.CartModel;
+import com.example.canvala.data.model.ProductModel;
 import com.example.canvala.databinding.FragmentCartBinding;
 import com.example.canvala.ui.main.user.adapter.CartAdapter;
 import com.example.canvala.util.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -53,9 +56,23 @@ public class CartFragment extends Fragment {
         return binding.getRoot();
     }
 
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                return false;
+            }
+        });
         getCart();
     }
 
@@ -115,6 +132,22 @@ public class CartFragment extends Fragment {
             Toasty.success(getContext(), text, Toasty.LENGTH_SHORT).show();
         }else {
             Toasty.error(getContext(), text, Toasty.LENGTH_SHORT).show();
+        }
+    }
+
+    private void filter(String text) {
+        ArrayList<CartModel> filteredList = new ArrayList<>();
+        for (CartModel item : cartModelList) {
+            if (item.getProductName().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(item);
+            }
+
+            cartAdapter.filter(filteredList);
+            if (filteredList.isEmpty()) {
+
+            }else {
+                cartAdapter.filter(filteredList);
+            }
         }
     }
 }

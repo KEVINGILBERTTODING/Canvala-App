@@ -219,6 +219,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                                         Integer sisaSaldo = stokSebelum - stockSesudah;
                                         Log.d("sisa saldo", "onResponse: " + sisaSaldo);
                                         productModelList.get(getAdapterPosition()).setStock(sisaSaldo);
+                                        notifyDataSetChanged();
                                         dialog.dismiss();
                                         if (onButtonClickListener != null) {
                                             onButtonClickListener.onButtonClicked();
