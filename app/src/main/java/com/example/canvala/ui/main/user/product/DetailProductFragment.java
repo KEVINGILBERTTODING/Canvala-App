@@ -9,11 +9,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.canvala.R;
 import com.example.canvala.databinding.FragmentDetailProductBinding;
+
+import org.w3c.dom.Text;
 
 
 public class DetailProductFragment extends Fragment {
@@ -38,9 +41,14 @@ public class DetailProductFragment extends Fragment {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.ivProduct);
 
+
+        String replacedString = getArguments().getString("detail").replaceAll("<p>|</p>|&nbsp;|\n", "");
+
+
         binding.tvNamaProduct.setText(getArguments().getString("nama_produk"));
         binding.tvHarga.setText(getArguments().getString("harga"));
-        binding.tvDetailProduct.setText(getArguments().getString("detail"));
+        binding.tvDetailProduct.setText(replacedString);
+        binding.tvStok.setText(getArguments().getInt("stock") + " Stock");
 
         return binding.getRoot();
     }
@@ -60,4 +68,6 @@ public class DetailProductFragment extends Fragment {
             }
         });
     }
+
+
 }

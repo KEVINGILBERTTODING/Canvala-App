@@ -16,10 +16,10 @@ public class CartModel implements Serializable {
      private String productId;
 
      @SerializedName("banyak")
-     private String quantity;
+     private Integer quantity;
 
      @SerializedName("total")
-     private String total;
+     private Integer total;
 
      @SerializedName("id_product")
      private String idProduct;
@@ -31,7 +31,7 @@ public class CartModel implements Serializable {
      private String unit;
 
      @SerializedName("price")
-     private String price;
+     private Integer price;
 
      @SerializedName("descriptions")
      private String descriptions;
@@ -48,7 +48,7 @@ public class CartModel implements Serializable {
      @SerializedName("photos")
      private String photos;
 
-     public CartModel(String cartId, String userId, String productId, String quantity, String total, String idProduct, String productName, String unit, String price, String descriptions, String categoryId, String stock, String galleryId, String photos) {
+     public CartModel(String cartId, String userId, String productId, Integer quantity, Integer total, String idProduct, String productName, String unit, Integer price, String descriptions, String categoryId, String stock, String galleryId, String photos) {
           this.cartId = cartId;
           this.userId = userId;
           this.productId = productId;
@@ -89,19 +89,19 @@ public class CartModel implements Serializable {
           this.productId = productId;
      }
 
-     public String getQuantity() {
+     public Integer getQuantity() {
           return quantity;
      }
 
-     public void setQuantity(String quantity) {
+     public void setQuantity(Integer quantity) {
           this.quantity = quantity;
      }
 
-     public String getTotal() {
+     public Integer getTotal() {
           return total;
      }
 
-     public void setTotal(String total) {
+     public void setTotal(Integer total) {
           this.total = total;
      }
 
@@ -129,11 +129,11 @@ public class CartModel implements Serializable {
           this.unit = unit;
      }
 
-     public String getPrice() {
+     public Integer getPrice() {
           return price;
      }
 
-     public void setPrice(String price) {
+     public void setPrice(Integer price) {
           this.price = price;
      }
 

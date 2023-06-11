@@ -47,6 +47,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         String price = decimalFormat.format(productModelList.get(holder.getAdapterPosition()).getPrice());
         holder.tvHarga.setText("Rp. " + price);
 
+
+
         holder.tvStock.setText(productModelList.get(holder.getAdapterPosition()).getStock() + " Stock");
 
         Glide.with(context)
@@ -91,6 +93,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             bundle.putString("nama_produk", productModelList.get(getAdapterPosition()).getProduct_name());
             bundle.putString("harga", tvHarga.getText().toString());
             bundle.putInt("price", productModelList.get(getAdapterPosition()).getPrice());
+            bundle.putInt("stock", productModelList.get(getAdapterPosition()).getStock());
             bundle.putString("detail", productModelList.get(getAdapterPosition()).getDescriptions());
             fragment.setArguments(bundle);
             ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()

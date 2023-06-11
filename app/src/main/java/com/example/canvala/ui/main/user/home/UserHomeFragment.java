@@ -25,6 +25,7 @@ import com.example.canvala.data.model.UserModel;
 import com.example.canvala.databinding.FragmentUserHomeBinding;
 import com.example.canvala.ui.main.auth.LoginActivity;
 import com.example.canvala.ui.main.user.adapter.ProductAdapter;
+import com.example.canvala.ui.main.user.cart.CartFragment;
 import com.example.canvala.util.Constants;
 
 import java.util.ArrayList;
@@ -80,6 +81,17 @@ public class UserHomeFragment extends Fragment {
         });
         getProfile();
         getTotalCart();
+
+        listener();
+    }
+
+    private void listener() {
+        binding.btnCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replace(new CartFragment());
+            }
+        });
     }
 
     private void getAllProduct() {
@@ -201,5 +213,10 @@ public class UserHomeFragment extends Fragment {
         }else {
             Toasty.error(getContext(), text, Toasty.LENGTH_SHORT).show();
         }
+    }
+
+    private void replace(Fragment fragment) {
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameUsers, fragment).addToBackStack(null).commit();
     }
 }

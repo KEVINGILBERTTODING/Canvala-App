@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.main.user.cart.CartFragment">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@drawable/wave_main"
+            android:padding="@dimen/_10sdp"
+            android:id="@+id/rlHeader"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:background="@drawable/baseline_arrow_back_24"
+                android:backgroundTint="@color/white"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_toRightOf="@id/btnBack"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Segera checkout sebelum kehabisan"
+                    android:fontFamily="@font/popmed"
+                    android:textColor="@color/white"
+                    android:id="@+id/tvnama"
+                    android:textSize="@dimen/_9ssp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Keranjang"
+                    android:fontFamily="@font/popsem"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp"/>
+
+                <androidx.appcompat.widget.SearchView
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    app:queryHint="Cari produk"
+                    android:id="@+id/searchBar"
+                    app:iconifiedByDefault="false"
+                    android:background="@drawable/container_searchview"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rlAddress"
+            android:padding="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:layout_below="@id/rlHeader"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alamat pengiriman"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/popmed"
+                android:textColor="@color/black2"
+                android:textSize="@dimen/_10ssp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Detail"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:layout_alignParentRight="true"
+                    android:fontFamily="@font/popmed"
+                    android:textColor="@color/black2"
+                    android:textSize="@dimen/_10ssp"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:tint="@color/black2"
+                    android:src="@drawable/baseline_keyboard_arrow_down_24"
+                    android:layout_toRightOf="@id/tv1"/>
+
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/vAlamat"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/main_ligh"
+            android:layout_below="@id/rlAddress"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProduct"
+            android:padding="@dimen/_10sdp"
+            android:layout_below="@id/vAlamat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tidak ada produk"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:fontFamily="@font/popmed"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/_10ssp"/>
+
+
+
+    </RelativeLayout>
+
+</layout>

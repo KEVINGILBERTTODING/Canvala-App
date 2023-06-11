@@ -55,6 +55,17 @@
                         android:textSize="@dimen/_12ssp"/>
 
                     <TextView
+                        android:id="@+id/tvStok"
+                        android:layout_alignParentLeft="true"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/black2"
+                        android:layout_marginRight="@dimen/_30sdp"
+                        android:layout_height="wrap_content"
+                        android:text="12 Stock"
+                        android:layout_below="@id/tvNamaProduct"
+                        android:fontFamily="@font/popmed"
+                        android:textSize="@dimen/_11ssp"/>
+                    <TextView
                         android:id="@+id/tvHarga"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -68,12 +79,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
-                        android:layout_below="@id/tvNamaProduct"
+                        android:layout_below="@id/tvStok"
                         android:orientation="vertical">
                         <TextView
                             android:id="@+id/tvDetailProduct"
                             android:layout_alignParentLeft="true"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:textColor="@color/black2"
                             android:layout_marginRight="@dimen/_30sdp"
                             android:layout_height="wrap_content"
