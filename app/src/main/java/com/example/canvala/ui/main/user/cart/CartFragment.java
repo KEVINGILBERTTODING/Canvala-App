@@ -41,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CartFragment extends Fragment {
+public class CartFragment extends Fragment implements CartAdapter.OnButtonClickListener {
     private FragmentCartBinding binding;
     List<CartModel> cartModelList;
     CartAdapter cartAdapter;
@@ -137,6 +137,12 @@ public class CartFragment extends Fragment {
 
             }
         });
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     private void getCart() {
@@ -148,17 +154,22 @@ public class CartFragment extends Fragment {
                     binding.tvEmpty.setVisibility(View.GONE);
                     cartModelList = response.body();
                     cartAdapter = new CartAdapter(getContext(), cartModelList);
+                    cartAdapter.setOnButtonClickListener(CartFragment.this);
                     linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                     binding.rvProduct.setLayoutManager(linearLayoutManager);
                     binding.rvProduct.setAdapter(cartAdapter);
                     binding.rvProduct.setHasFixedSize(true);
                     getInformationOrder();
                     binding.btnPesan.setEnabled(true);
+                    binding.lrBody.setVisibility(View.VISIBLE);
                     showProgressBar("adasd", "ssds", false);
                 }else {
                     showProgressBar("Sds", "dsd", false);
                     binding.tvEmpty.setVisibility(View.VISIBLE);
-                    binding.btnPesan.setEnabled(false);
+                    binding.btnPesan.setVisibility(View.GONE);
+                    binding.lrBody.setVisibility(View.GONE);
+                    binding.tvTotalPembayaran.setText("-");
+
 
                 }
             }
@@ -167,6 +178,7 @@ public class CartFragment extends Fragment {
             public void onFailure(Call<List<CartModel>> call, Throwable t) {
                 showProgressBar("Sds", "dsd", false);
                 binding.tvEmpty.setVisibility(View.GONE);
+                binding.lrBody.setVisibility(View.GONE);
                 showToast("error", "Tidak ada koneksi internet");
                 binding.btnPesan.setEnabled(false);
 
@@ -280,12 +292,20 @@ public class CartFragment extends Fragment {
             @Override
             public void onResponse(Call<InformationModel> call, Response<InformationModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    showProgressBar("sds", "Sd", false);
+
                     binding.tvJumlahProduk.setText(response.body().getQty() + " Produk");
                     binding.tvBeratBarang.setText(response.body().getBerat() + " Kilogram");
                     getFormatRupiah(binding.tvNominal, response.body().getHargaTotal());
                     getFormatRupiah(binding.tvTotalPembayaran, response.body().getHargaTotal());
                     binding.btnPesan.setEnabled(true);
+
+                    // sembunyikan
+                    if (response.body().getQty() <= 99){
+                        binding.lrProdukDibawah100.setVisibility(View.VISIBLE);
+                    }else if (response.body().getQty() >= 100) {
+                        binding.lrProdukDiatas100.setVisibility(View.VISIBLE);
+                    }
+                    showProgressBar("sds", "Sd", false);
                 }else {
                     showProgressBar("sds", "Sd", false);
                     showToast("er", "Gagal memuat informasi pembelian");
@@ -309,5 +329,10 @@ public class CartFragment extends Fragment {
         DecimalFormat decimalFormat = new DecimalFormat("#,##0");
         String price = decimalFormat.format(nominal);
         tvText.setText("Rp. " + price);
+    }
+
+    @Override
+    public void onButtonClicked() {
+        getCart();
     }
 }

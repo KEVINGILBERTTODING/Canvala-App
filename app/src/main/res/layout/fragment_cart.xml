@@ -252,6 +252,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/lrBody"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_below="@id/rvProduct"
@@ -430,6 +431,7 @@ RCWJ+7WC, Leyangan, Kec. Ungaran Tim., Kabupaten Semarang, Jawa Tengah 50519."
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="wrap_content"
@@ -456,16 +458,7 @@ RCWJ+7WC, Leyangan, Kec. Ungaran Tim., Kabupaten Semarang, Jawa Tengah 50519."
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvEmpty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tidak ada produk"
-                    android:layout_centerInParent="true"
-                    android:visibility="gone"
-                    android:fontFamily="@font/popmed"
-                    android:textColor="@color/light_gray"
-                    android:textSize="@dimen/_10ssp"/>
+
 
 
 
@@ -524,6 +517,17 @@ RCWJ+7WC, Leyangan, Kec. Ungaran Tim., Kabupaten Semarang, Jawa Tengah 50519."
             </RelativeLayout>
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tidak ada produk"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:fontFamily="@font/popmed"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/_10ssp"/>
 
 
 

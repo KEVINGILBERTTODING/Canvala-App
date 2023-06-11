@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -36,6 +37,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     List<CartModel> cartModelList;
     AlertDialog progressDialog;
     UserService userService;
+
+    private CartAdapter.OnButtonClickListener onButtonClickListener;
+
+
+    public void setOnButtonClickListener(CartAdapter.OnButtonClickListener listener) {
+        this.onButtonClickListener = listener;
+    }
+
 
     public CartAdapter(Context context, List<CartModel> cartModelList) {
         this.context = context;
@@ -108,6 +117,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                         public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                             if (response.isSuccessful() && response.body().getStatus() == 200) {
                                 showProgressBar("ssds", "sds", false);
+                                if (onButtonClickListener != null) {
+                                    onButtonClickListener.onButtonClicked();
+                                }
                                 cartModelList.remove(getAdapterPosition());
                                 notifyDataSetChanged();
                                 showToast("success", "Berhasil mengahapus product");
@@ -158,5 +170,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }else {
             Toasty.error(context, text, Toasty.LENGTH_SHORT).show();
         }
+    }
+
+    public interface OnButtonClickListener {
+        void onButtonClicked();
     }
 }
