@@ -171,9 +171,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                            if (etQty.getText().toString().equals("0")) {
-                               etQty.setText("1");
+                               btnMasukkan.setEnabled(false);
+                               showToast("error", "Jumlah tidak valid");
+
                            }else if (etQty.getText().toString().isEmpty()) {
-                               etQty.setText("1");
+                               btnMasukkan.setEnabled(false);
+                           }else if (Integer.parseInt(etQty.getText().toString()) < 1) {
+                               showToast("error", "Jumlah tidak valid");
+                               btnMasukkan.setEnabled(false);
                            }
 
                            else {
