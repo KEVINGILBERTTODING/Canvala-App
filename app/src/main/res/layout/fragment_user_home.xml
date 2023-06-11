@@ -73,8 +73,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:text="79"
-
                         android:fontFamily="@font/popmed"
                         android:textSize="@dimen/_8sdp"/>
 
@@ -181,10 +179,6 @@
                         android:fontFamily="@font/popsem"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12ssp"/>
-
-
-
-
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvProduct"

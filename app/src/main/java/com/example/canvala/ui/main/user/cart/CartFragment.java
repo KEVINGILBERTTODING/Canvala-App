@@ -11,19 +11,28 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.example.canvala.R;
 import com.example.canvala.data.api.ApiConfig;
 import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.CartModel;
+import com.example.canvala.data.model.InformationModel;
 import com.example.canvala.data.model.ProductModel;
+import com.example.canvala.data.model.RekeningModel;
+import com.example.canvala.data.model.UserModel;
 import com.example.canvala.databinding.FragmentCartBinding;
 import com.example.canvala.ui.main.user.adapter.CartAdapter;
+import com.example.canvala.ui.main.user.adapter.SpinnerRekeningAdapter;
 import com.example.canvala.util.Constants;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +45,15 @@ public class CartFragment extends Fragment {
     private FragmentCartBinding binding;
     List<CartModel> cartModelList;
     CartAdapter cartAdapter;
+    List<RekeningModel> rekeningModelList;
     LinearLayoutManager linearLayoutManager;
     UserService userService;
+    SpinnerRekeningAdapter spinnerRekeningAdapter;
+    String [] opsiKota = {"JOGJA", "SEMARANG"};
     String userId;
     SharedPreferences sharedPreferences;
     AlertDialog progressDialog;
+    String kota, rekening;
 
 
 
@@ -52,6 +65,10 @@ public class CartFragment extends Fragment {
         sharedPreferences = getContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         userId = sharedPreferences.getString(Constants.SHARED_PREF_USER_ID, null);
         userService = ApiConfig.getClient().create(UserService.class);
+
+        ArrayAdapter adapterKota = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, opsiKota);
+        adapterKota.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spKota.setAdapter(adapterKota);
 
         return binding.getRoot();
     }
@@ -74,6 +91,52 @@ public class CartFragment extends Fragment {
             }
         });
         getCart();
+        listener();
+        getProfile();
+        getAllRekening();
+
+    }
+
+    private void listener() {
+        binding.spKota.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                kota = opsiKota[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        binding.icArrowDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.lrAlamat.setVisibility(View.VISIBLE);
+                binding.icArrowDown.setVisibility(View.GONE);
+                binding.icArrowUp.setVisibility(View.VISIBLE);
+            }
+        });
+
+        binding.icArrowUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.lrAlamat.setVisibility(View.GONE);
+                binding.icArrowUp.setVisibility(View.GONE);
+                binding.icArrowDown.setVisibility(View.VISIBLE);
+            }
+        });
+        binding.spPembayaran.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                rekening = String.valueOf(spinnerRekeningAdapter.getRekeningId(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void getCart() {
@@ -89,10 +152,14 @@ public class CartFragment extends Fragment {
                     binding.rvProduct.setLayoutManager(linearLayoutManager);
                     binding.rvProduct.setAdapter(cartAdapter);
                     binding.rvProduct.setHasFixedSize(true);
+                    getInformationOrder();
+                    binding.btnPesan.setEnabled(true);
                     showProgressBar("adasd", "ssds", false);
                 }else {
                     showProgressBar("Sds", "dsd", false);
                     binding.tvEmpty.setVisibility(View.VISIBLE);
+                    binding.btnPesan.setEnabled(false);
+
                 }
             }
 
@@ -101,10 +168,41 @@ public class CartFragment extends Fragment {
                 showProgressBar("Sds", "dsd", false);
                 binding.tvEmpty.setVisibility(View.GONE);
                 showToast("error", "Tidak ada koneksi internet");
+                binding.btnPesan.setEnabled(false);
+
 
             }
         });
 
+
+    }
+
+    private void getAllRekening() {
+        showProgressBar("Loading", "Memuat data...", true);
+        userService.getallrekening().enqueue(new Callback<List<RekeningModel>>() {
+            @Override
+            public void onResponse(Call<List<RekeningModel>> call, Response<List<RekeningModel>> response) {
+                if (response.isSuccessful() && response.body().size() > 0) {
+                    rekeningModelList = response.body();
+                    spinnerRekeningAdapter = new SpinnerRekeningAdapter(getContext(), rekeningModelList);
+                    binding.spPembayaran.setAdapter(spinnerRekeningAdapter);
+                    showProgressBar("sds", "sds", false);
+                    binding.btnPesan.setEnabled(true);
+                }else {
+                    showProgressBar("sds", "sds", false);
+                    binding.btnPesan.setEnabled(false);
+                    showToast("d", "Tidak dapat memuat metode pembayaran");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<RekeningModel>> call, Throwable t) {
+                showProgressBar("sds", "sds", false);
+                binding.btnPesan.setEnabled(false);
+                showToast("d", "Tidak ada koneksi internet");
+
+            }
+        });
 
     }
 
@@ -149,5 +247,67 @@ public class CartFragment extends Fragment {
                 cartAdapter.filter(filteredList);
             }
         }
+    }
+
+    private void getProfile() {
+        showProgressBar("Loading", "Memuat data...", true);
+        userService.getMyProfile(userId).enqueue(new Callback<UserModel>() {
+            @Override
+            public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String replacedString = response.body().getAddress().replaceAll("<p>|</p>|&nbsp;|\n", "");
+                    binding.etAlamat.setText(replacedString);
+                    binding.etTelepon.setText(response.body().getPhoneNumber());
+                    binding.etKodePos.setText(response.body().getPostalCode());
+                    showProgressBar("dsds", "Sdsd",false);
+                }else {
+                    showProgressBar("dsds", "Sdsd",false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserModel> call, Throwable t) {
+                showProgressBar("dsds", "Sdsd",false);
+                showToast("error", "Tidak ada koneksi internet");
+
+            }
+        });
+    }
+
+    private void getInformationOrder() {
+        showProgressBar("Loading", "Memuat informasi pesanan...", true);
+        userService.getInformationOrder(userId).enqueue(new Callback<InformationModel>() {
+            @Override
+            public void onResponse(Call<InformationModel> call, Response<InformationModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    showProgressBar("sds", "Sd", false);
+                    binding.tvJumlahProduk.setText(response.body().getQty() + " Produk");
+                    binding.tvBeratBarang.setText(response.body().getBerat() + " Kilogram");
+                    getFormatRupiah(binding.tvNominal, response.body().getHargaTotal());
+                    getFormatRupiah(binding.tvTotalPembayaran, response.body().getHargaTotal());
+                    binding.btnPesan.setEnabled(true);
+                }else {
+                    showProgressBar("sds", "Sd", false);
+                    showToast("er", "Gagal memuat informasi pembelian");
+                    binding.btnPesan.setEnabled(false);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InformationModel> call, Throwable t) {
+                showProgressBar("sds", "Sd", false);
+                showToast("er", "Tidak ada koneksi internet");
+                binding.btnPesan.setEnabled(false);
+
+            }
+        });
+
+    }
+
+    private void getFormatRupiah(TextView tvText, Integer nominal) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0");
+        String price = decimalFormat.format(nominal);
+        tvText.setText("Rp. " + price);
     }
 }

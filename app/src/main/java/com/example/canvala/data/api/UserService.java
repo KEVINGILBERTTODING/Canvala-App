@@ -1,7 +1,10 @@
 package com.example.canvala.data.api;
 
+import com.airbnb.lottie.L;
 import com.example.canvala.data.model.CartModel;
+import com.example.canvala.data.model.InformationModel;
 import com.example.canvala.data.model.ProductModel;
+import com.example.canvala.data.model.RekeningModel;
 import com.example.canvala.data.model.ResponseModel;
 import com.example.canvala.data.model.UserModel;
 
@@ -53,5 +56,14 @@ public interface UserService {
             @Field("id_cart") String idCart,
             @Field("id_product") String idProduct,
             @Field("stock") Integer stock
+    );
+
+    @GET("user/getallrekening")
+    Call<List<RekeningModel>> getallrekening();
+
+    @FormUrlEncoded
+    @POST("user/getInformationOrder")
+    Call<InformationModel> getInformationOrder(
+            @Field("user_id") String userId
     );
 }
