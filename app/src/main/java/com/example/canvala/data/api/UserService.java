@@ -46,4 +46,12 @@ public interface UserService {
             @Field("user_id") String userId,
             @Field("product_id") String productId
     );
+
+    @FormUrlEncoded
+    @POST("user/deletecart")
+    Call<ResponseModel> deleteCart(
+            @Field("id_cart") String idCart,
+            @Field("id_product") String idProduct,
+            @Field("stock") Integer stock
+    );
 }
