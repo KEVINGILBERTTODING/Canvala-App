@@ -1,10 +1,17 @@
 package com.example.canvala.ui.main.user.adapter;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,16 +23,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.canvala.R;
+import com.example.canvala.data.api.ApiConfig;
+import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.ProductModel;
 import com.example.canvala.ui.main.user.product.DetailProductFragment;
+import com.example.canvala.util.Constants;
+
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+import retrofit2.http.Field;
+
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
     Context context;
     List<ProductModel> productModelList;
+    SharedPreferences sharedPreferences;
+    private String userId;
+    private AlertDialog progressDialog;
+    private UserService userService;
 
     public ProductAdapter(Context context, List<ProductModel> productModelList) {
         this.context = context;
@@ -74,13 +93,93 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvNamaProduct, tvHarga, tvStock;
         ImageView ivProduct;
+        Button btnCart;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNamaProduct = itemView.findViewById(R.id.tvNamaProduct);
             tvHarga = itemView.findViewById(R.id.tvHarga);
             ivProduct = itemView.findViewById(R.id.ivProduct);
             tvStock = itemView.findViewById(R.id.tvStock);
+            btnCart = itemView.findViewById(R.id.btnCart);
             itemView.setOnClickListener(this);
+
+            userService = ApiConfig.getClient().create(UserService.class);
+
+            sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+            userId = sharedPreferences.getString(Constants.SHARED_PREF_USER_ID, null);
+
+
+
+            btnCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Dialog dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.layout_add_cart);
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    ImageView ivProduct = dialog.findViewById(R.id.ivProduct);
+                    TextView tvNamaProduct = dialog.findViewById(R.id.tvNamaProduct);
+                    TextView tvprice = dialog.findViewById(R.id.tvPrice);
+                    EditText etQty = dialog.findViewById(R.id.etQty);
+                    Button btnMasukkan = dialog.findViewById(R.id.btnMasukkan);
+
+                    etQty.requestFocus();
+
+
+                    Glide.with(context)
+                            .load(productModelList.get(getAdapterPosition()).getPhotos())
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .fitCenter()
+                            .centerInside()
+                            .skipMemoryCache(true)
+                            .into(ivProduct);
+
+                    DecimalFormat decimalFormat = new DecimalFormat("#,##0");
+                    String price = decimalFormat.format(productModelList.get(getAdapterPosition()).getPrice());
+                    tvprice.setText("Rp. " + price);
+                    tvNamaProduct.setText(productModelList.get(getAdapterPosition()).getProduct_name());
+
+                    dialog.show();
+
+                    etQty.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                           if (etQty.getText().toString().equals("0")) {
+                               etQty.setText("1");
+                           }else if (etQty.getText().toString().isEmpty()) {
+                               etQty.setText("1");
+                           }
+
+                           else {
+                               // kalikan qty dengan harga
+                               int qty = Integer.parseInt(etQty.getText().toString());
+                               int price = productModelList.get(getAdapterPosition()).getPrice();
+                               int total = qty * price;
+                               tvprice.setText("Rp. " + decimalFormat.format(total));
+                               btnMasukkan.setEnabled(true);
+                           }
+
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                        }
+                    });
+
+
+
+
+
+                }
+            });
         }
 
         @Override
@@ -100,4 +199,33 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     .replace(R.id.frameUsers, fragment).addToBackStack(null).commit();
         }
     }
+
+
+    private void showProgressBar(String title, String message, boolean isLoading) {
+        if (isLoading) {
+            // Membuat progress dialog baru jika belum ada
+            if (progressDialog == null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(title);
+                builder.setMessage(message);
+                builder.setCancelable(false);
+                progressDialog = builder.create();
+            }
+            progressDialog.show(); // Menampilkan progress dialog
+        } else {
+            // Menyembunyikan progress dialog jika ada
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
+    }
+    private void showToast(String jenis, String text) {
+        if (jenis.equals("success")) {
+            Toasty.success(context, text, Toasty.LENGTH_SHORT).show();
+        }else {
+            Toasty.error(context, text, Toasty.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

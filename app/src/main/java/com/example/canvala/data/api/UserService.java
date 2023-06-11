@@ -37,4 +37,13 @@ public interface UserService {
             @Field("password") String password,
             @Field("phone_number") String phoneNumber
     );
+
+
+    @FormUrlEncoded
+    @POST("user/addProductCart")
+    Call<ResponseModel> addProductToCart(
+            @Field("qty") Integer qty,
+            @Field("user_id") String userId,
+            @Field("product_id") String productId
+    );
 }
