@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         app:contentPadding="@dimen/_10sdp"
         app:cardUseCompatPadding="true"
-        app:cardCornerRadius="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_20sdp"
         android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -18,6 +18,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/sad_animation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_210sdp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/cart_anim" />
 
                 <TextView
                     android:layout_width="match_parent"

@@ -75,4 +75,15 @@ public interface UserService {
             @Field("phone_number") String phoneNumber,
             @Field("postal_code") String postalCode
     );
+
+    @FormUrlEncoded
+    @POST("user/checkOut")
+    Call<ResponseModel> checkOut(
+            @Field("user_id") String userId,
+            @Field("total_price") Integer totalPrice,
+            @Field("city") String city,
+            @Field("rek_id") Integer rekId,
+            @Field("weight_total") Integer weightTotal
+    );
+
 }

@@ -31,6 +31,7 @@ import com.example.canvala.data.model.UserModel;
 import com.example.canvala.databinding.FragmentCartBinding;
 import com.example.canvala.ui.main.user.adapter.CartAdapter;
 import com.example.canvala.ui.main.user.adapter.SpinnerRekeningAdapter;
+import com.example.canvala.ui.main.user.transactions.TransactionsFragment;
 import com.example.canvala.util.Constants;
 
 import java.text.DecimalFormat;
@@ -41,6 +42,7 @@ import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Field;
 
 public class CartFragment extends Fragment implements CartAdapter.OnButtonClickListener {
     private FragmentCartBinding binding;
@@ -54,6 +56,7 @@ public class CartFragment extends Fragment implements CartAdapter.OnButtonClickL
     String userId;
     SharedPreferences sharedPreferences;
     AlertDialog progressDialog;
+    Integer totalPrice, weightTotal;
     String kota, rekening;
 
 
@@ -158,6 +161,24 @@ public class CartFragment extends Fragment implements CartAdapter.OnButtonClickL
                     binding.etKodePos.requestFocus();
                 }else {
                     updateAlamat();
+                }
+            }
+        });
+
+        binding.btnPesan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (binding.etAlamat.getText().toString().isEmpty()) {
+                    binding.lrAlamat.setVisibility(View.VISIBLE);
+                    binding.etAlamat.setError("Alamat tidak boleh kosong");
+                    binding.etTelepon.requestFocus();
+                }else if (kota == null) {
+                    binding.lrAlamat.setVisibility(View.VISIBLE);
+                    showToast("error", "Kota tidak boleh kosong");
+                }
+
+                else {
+                    checkOut();
                 }
             }
         });
@@ -316,6 +337,8 @@ public class CartFragment extends Fragment implements CartAdapter.OnButtonClickL
                     getFormatRupiah(binding.tvNominal, response.body().getHargaTotal());
                     getFormatRupiah(binding.tvTotalPembayaran, response.body().getHargaTotal());
                     binding.btnPesan.setEnabled(true);
+                    weightTotal = Integer.parseInt(response.body().getBerat() + "000");
+                    totalPrice = response.body().getHargaTotal();
 
                     // sembunyikan
                     if (response.body().getQty() <= 99){
@@ -382,5 +405,42 @@ public class CartFragment extends Fragment implements CartAdapter.OnButtonClickL
 
             }
         });
+    }
+
+    private void checkOut() {
+
+        showProgressBar("Loading", "Proses transaksi", true);
+        userService.checkOut(
+                userId,
+                totalPrice,
+                kota,
+                Integer.parseInt(rekening),
+                weightTotal
+        ).enqueue(new Callback<ResponseModel>() {
+            @Override
+            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                if (response.isSuccessful() && response.body().getStatus() == 200) {
+                    showProgressBar("sds", "dssd", false);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frameUsers, new TransactionsFragment()).commit();
+                    showToast("success", "Berhasil membuat pesanan baru");
+
+                }else {
+                    showProgressBar("Dsd", "sdsd", false);
+                    showToast("error", "Gagal membuat pesanan");
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel> call, Throwable t) {
+                showProgressBar("Dsd", "sdsd", false);
+                showToast("error", "Periksa koneksi internet anda");
+
+            }
+        });
+
+
     }
 }
