@@ -10,13 +10,19 @@ import com.example.canvala.data.model.TransactionsModel;
 import com.example.canvala.data.model.UserModel;
 
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 
 public interface UserService {
@@ -92,4 +98,11 @@ public interface UserService {
     Call<List<TransactionsModel>> getMyTransactions (
             @Query("user_id") String userId
     );
+
+    @Multipart
+    @POST("user/uploadBuktiTransfer")
+    Call<ResponseModel> uploadBuktiTransfer(
+            @PartMap Map<String, RequestBody> textData,
+            @Part MultipartBody.Part image
+            );
 }

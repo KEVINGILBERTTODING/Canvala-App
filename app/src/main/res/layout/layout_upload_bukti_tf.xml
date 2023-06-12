@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        app:cardCornerRadius="@dimen/_20sdp"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_20sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Upload Bukti Transfer"
+                android:fontFamily="@font/popsem"
+                android:textColor="@color/main"
+                android:textSize="@dimen/_13sdp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/tvMessageAlert"
+                android:text="Upload bukti transfer anda disini"
+                android:fontFamily="@font/popmed"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/black2"
+                android:textSize="@dimen/_11sdp"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:background="@color/main_ligh"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Nama Bank"
+                android:fontFamily="@font/popmed"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/black2"
+                android:textSize="@dimen/_9sdp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvBankName"
+                android:layout_width="match_parent"
+                android:text="Nama Bank"
+                android:fontFamily="@font/popsem"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11sdp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="No Rekening"
+                android:fontFamily="@font/popmed"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/black2"
+                android:textSize="@dimen/_9sdp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvNoRek"
+                android:layout_width="match_parent"
+                android:text="No rek"
+                android:fontFamily="@font/popsem"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11sdp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Atas Nama"
+                android:fontFamily="@font/popmed"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/black2"
+                android:textSize="@dimen/_9sdp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvNama"
+                android:layout_width="match_parent"
+                android:text="No rek"
+                android:fontFamily="@font/popsem"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11sdp"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:background="@color/main_ligh"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPilih"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cornerRadius="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Pilih"/>
+
+                <EditText
+                    android:id="@+id/etPathImage"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:maxLength="25"
+                    android:fontFamily="@font/popmed"
+                    android:textSize="@dimen/_9ssp"
+                    android:textColor="@color/black2"
+                    android:layout_gravity="bottom"/>
+            </LinearLayout>
+
+
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUpload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:backgroundTint="@color/main"
+                android:text="Upload"/>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBatal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:backgroundTint="@color/light_gray"
+                android:text="Batal"/>
+
+
+
+
+        </LinearLayout>
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

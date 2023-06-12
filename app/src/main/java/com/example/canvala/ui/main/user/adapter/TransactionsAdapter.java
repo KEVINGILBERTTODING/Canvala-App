@@ -91,13 +91,14 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             bundle.putString("kode_pos", transactionsModelList.get(getAdapterPosition()).getPostalCode());
             bundle.putString("alamat", transactionsModelList.get(getAdapterPosition()).getAddress());
             bundle.putString("nama_bank", transactionsModelList.get(getAdapterPosition()).getBankName());
+            bundle.putString("no_rek", transactionsModelList.get(getAdapterPosition()).getNoRek());
+            bundle.putString("rekening_name", transactionsModelList.get(getAdapterPosition()).getRekName());
             bundle.putString("berat_total", transactionsModelList.get(getAdapterPosition()).getWeightTotal());
             bundle.putString("total", transactionsModelList.get(getAdapterPosition()).getTotalPrice());
             bundle.putString("status", transactionsModelList.get(getAdapterPosition()).getTransactionStatus());
             fragment.setArguments(bundle);
             ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frameUsers, fragment).addToBackStack(null).commit();
-
         }
     }
 }
