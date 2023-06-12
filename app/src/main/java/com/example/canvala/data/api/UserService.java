@@ -6,6 +6,7 @@ import com.example.canvala.data.model.InformationModel;
 import com.example.canvala.data.model.ProductModel;
 import com.example.canvala.data.model.RekeningModel;
 import com.example.canvala.data.model.ResponseModel;
+import com.example.canvala.data.model.TransactionsModel;
 import com.example.canvala.data.model.UserModel;
 
 import java.util.List;
@@ -86,4 +87,9 @@ public interface UserService {
             @Field("weight_total") Integer weightTotal
     );
 
+
+    @GET("user/getMyTransactions")
+    Call<List<TransactionsModel>> getMyTransactions (
+            @Query("user_id") String userId
+    );
 }

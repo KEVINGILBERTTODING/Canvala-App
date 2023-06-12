@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.example.canvala.R;
 import com.example.canvala.ui.main.user.home.UserHomeFragment;
+import com.example.canvala.ui.main.user.transactions.TransactionsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -25,6 +26,9 @@ public class UserMainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.menuHome) {
                     replace(new UserHomeFragment());
+                    return true;
+                }else if (item.getItemId() == R.id.menuTransaksi) {
+                    replace(new TransactionsFragment());
                     return true;
                 }
 
