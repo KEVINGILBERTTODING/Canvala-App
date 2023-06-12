@@ -68,11 +68,19 @@ public class TransactionsModel implements Serializable {
 
         @SerializedName("roles")
         private String roles;
+        @SerializedName("bank_name")
+    private String bankName;
+
+    @SerializedName("number")
+    private String noRek;
+    @SerializedName("rekening_name")
+    private String rekName;
+
 
         // Getters and setters
 
 
-    public TransactionsModel(String transactionId, String userId, String totalPrice, String city, String rekeningId, String transactionStatus, String weightTotal, String delivered, String photoTransaction, String code, String receiver, String timeArrived, String createdAt, String name, String email, String password, String address, String phoneNumber, String postalCode, String roles) {
+    public TransactionsModel(String transactionId, String userId, String totalPrice, String city, String rekeningId, String transactionStatus, String weightTotal, String delivered, String photoTransaction, String code, String receiver, String timeArrived, String createdAt, String name, String email, String password, String address, String phoneNumber, String postalCode, String roles, String bankName, String noRek, String rekName) {
         this.transactionId = transactionId;
         this.userId = userId;
         this.totalPrice = totalPrice;
@@ -93,6 +101,9 @@ public class TransactionsModel implements Serializable {
         this.phoneNumber = phoneNumber;
         this.postalCode = postalCode;
         this.roles = roles;
+        this.bankName = bankName;
+        this.noRek = noRek;
+        this.rekName = rekName;
     }
 
     public String getTransactionId() {
@@ -160,7 +171,7 @@ public class TransactionsModel implements Serializable {
     }
 
     public String getPhotoTransaction() {
-        return Constants.URL_PRODUCT + photoTransaction;
+        return  photoTransaction;
     }
 
     public void setPhotoTransaction(String photoTransaction) {
@@ -253,5 +264,30 @@ public class TransactionsModel implements Serializable {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getNoRek() {
+        return noRek;
+    }
+
+    public void setNoRek(String noRek) {
+        this.noRek = noRek;
+    }
+
+    public String getRekName() {
+        return rekName;
+    }
+
+    public void setRekName(String rekName) {
+        this.rekName = rekName;
     }
 }

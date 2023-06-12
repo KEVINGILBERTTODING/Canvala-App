@@ -1,18 +1,23 @@
 package com.example.canvala.ui.main.user.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.canvala.R;
 import com.example.canvala.data.model.TransactionsModel;
+import com.example.canvala.ui.main.user.transactions.DetailTransactionsFragment;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.ViewHolder>  {
@@ -56,7 +61,12 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         return transactionsModelList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public void filter(ArrayList<TransactionsModel> filteredList){
+        transactionsModelList = filteredList;
+        notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvCodeTrans , tvStatus, tvPrice, tvDate;
 
         public ViewHolder(@NonNull View itemView) {
@@ -65,6 +75,29 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             tvStatus  = itemView.findViewById(R.id.tvStatus);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvPrice = itemView.findViewById(R.id.tvTotal);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Fragment fragment = new DetailTransactionsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("transaction_id", transactionsModelList.get(getAdapterPosition()).getTransactionId());
+            bundle.putString("code_transactions", transactionsModelList.get(getAdapterPosition()).getCode());
+            bundle.putString("bukti_tf", transactionsModelList.get(getAdapterPosition()).getPhotoTransaction());
+            bundle.putString("kota", transactionsModelList.get(getAdapterPosition()).getCity());
+            bundle.putString("telepon", transactionsModelList.get(getAdapterPosition()).getPhoneNumber());
+            bundle.putString("kode_pos", transactionsModelList.get(getAdapterPosition()).getPostalCode());
+            bundle.putString("alamat", transactionsModelList.get(getAdapterPosition()).getAddress());
+            bundle.putString("nama_bank", transactionsModelList.get(getAdapterPosition()).getBankName());
+            bundle.putString("berat_total", transactionsModelList.get(getAdapterPosition()).getWeightTotal());
+            bundle.putString("total", transactionsModelList.get(getAdapterPosition()).getTotalPrice());
+            bundle.putString("status", transactionsModelList.get(getAdapterPosition()).getTransactionStatus());
+            fragment.setArguments(bundle);
+            ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frameUsers, fragment).addToBackStack(null).commit();
+
         }
     }
 }
