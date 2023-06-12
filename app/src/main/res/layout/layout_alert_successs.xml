@@ -19,7 +19,7 @@
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/sad_animation"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_120sdp"
+                android:layout_height="@dimen/_150sdp"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 app:lottie_autoPlay="true"
@@ -38,13 +38,13 @@
             <TextView
                 android:layout_width="match_parent"
                 android:id="@+id/tvMessageAlert"
-                android:text="Anda berhasil upload bukti pembayaran, silahkan menunggu konfirmasi bukti pembayaran anda"
+                android:text="Anda berhasil upload bukti pembayaran, silahkan menunggu konfirmasi bukti pembayaran anda."
                 android:fontFamily="@font/popmed"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:textColor="@color/black2"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="@dimen/_9sdp"
                 android:layout_height="wrap_content"/>
 
 

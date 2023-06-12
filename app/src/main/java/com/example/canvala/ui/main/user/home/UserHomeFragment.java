@@ -250,7 +250,7 @@ public class UserHomeFragment extends Fragment implements ProductAdapter.OnButto
         bundle.putString("id", id);
         fragment.setArguments(bundle);
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frameUsers, fragment).commit();
+                .replace(R.id.frameUsers, fragment).addToBackStack(null).commit();
     }
 
     @Override
