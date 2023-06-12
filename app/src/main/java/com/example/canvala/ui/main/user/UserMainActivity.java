@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.example.canvala.R;
 import com.example.canvala.ui.main.user.home.UserHomeFragment;
+import com.example.canvala.ui.main.user.product.AllProductFragment;
 import com.example.canvala.ui.main.user.transactions.TransactionsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -29,6 +30,9 @@ public class UserMainActivity extends AppCompatActivity {
                     return true;
                 }else if (item.getItemId() == R.id.menuTransaksi) {
                     replace(new TransactionsFragment());
+                    return true;
+                }else if (item.getItemId() == R.id.menuProduct) {
+                    replace(new AllProductFragment());
                     return true;
                 }
 

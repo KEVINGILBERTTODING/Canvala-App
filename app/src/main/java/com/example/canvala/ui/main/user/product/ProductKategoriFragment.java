@@ -1,32 +1,28 @@
-package com.example.canvala.ui.main.user.home;
+package com.example.canvala.ui.main.user.product;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.canvala.R;
 import com.example.canvala.data.api.ApiConfig;
 import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.CartModel;
 import com.example.canvala.data.model.ProductModel;
-import com.example.canvala.data.model.UserModel;
-import com.example.canvala.databinding.FragmentUserHomeBinding;
-import com.example.canvala.ui.main.auth.LoginActivity;
+import com.example.canvala.databinding.AllProductFragmentBinding;
+import com.example.canvala.databinding.FragmentProductCategoryBinding;
 import com.example.canvala.ui.main.user.adapter.ProductAdapter;
 import com.example.canvala.ui.main.user.cart.CartFragment;
-import com.example.canvala.ui.main.user.product.ProductKategoriFragment;
 import com.example.canvala.util.Constants;
 
 import java.util.ArrayList;
@@ -37,9 +33,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserHomeFragment extends Fragment implements ProductAdapter.OnButtonClickListener {
+public class ProductKategoriFragment extends Fragment implements ProductAdapter.OnButtonClickListener {
 
-    private FragmentUserHomeBinding binding;
+    private FragmentProductCategoryBinding binding;
     List<ProductModel> productModelList;
     GridLayoutManager gridLayoutManager;
     ProductAdapter productAdapter;
@@ -54,10 +50,18 @@ public class UserHomeFragment extends Fragment implements ProductAdapter.OnButto
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentUserHomeBinding.inflate(inflater, container, false);
+        binding = FragmentProductCategoryBinding.inflate(inflater, container, false);
         sharedPreferences = getContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         userService = ApiConfig.getClient().create(UserService.class);
         userId = sharedPreferences.getString(Constants.SHARED_PREF_USER_ID, null);
+
+        if (getArguments().getString("id").equals("1")) {
+            binding.tvCategory.setText("Kategori Canvas Kecil");
+        }else  if (getArguments().getString("id").equals("2")) {
+            binding.tvCategory.setText("Kategori Canvas Sedang");
+        } if (getArguments().getString("id").equals("3")) {
+            binding.tvCategory.setText("Kategori Canvas Besar");
+        }
 
 
 
@@ -68,7 +72,7 @@ public class UserHomeFragment extends Fragment implements ProductAdapter.OnButto
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getAllProduct();
+        getAllProduct(getArguments().getString("id"));
         binding.searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -81,7 +85,6 @@ public class UserHomeFragment extends Fragment implements ProductAdapter.OnButto
                 return false;
             }
         });
-        getProfile();
         getTotalCart();
 
         listener();
@@ -94,32 +97,11 @@ public class UserHomeFragment extends Fragment implements ProductAdapter.OnButto
                 replace(new CartFragment());
             }
         });
-        binding.btnKecil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceKategori("1");
-
-            }
-        });
-
-        binding.btnSedang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceKategori("2");
-            }
-        });
-
-        binding.btnBesar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceKategori("3");
-            }
-        });
     }
 
-    private void getAllProduct() {
+    private void getAllProduct(String id) {
         showProgressBar("Loading", "Memuat data...", true);
-        userService.getAllProduct().enqueue(new Callback<List<ProductModel>>() {
+        userService.getProductByKategori(id).enqueue(new Callback<List<ProductModel>>() {
             @Override
             public void onResponse(Call<List<ProductModel>> call, Response<List<ProductModel>> response) {
                 if (response.isSuccessful() && response.body().size() > 0) {
@@ -127,7 +109,7 @@ public class UserHomeFragment extends Fragment implements ProductAdapter.OnButto
                     productAdapter = new ProductAdapter(getContext(), productModelList);
                     gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
                     binding.rvProduct.setLayoutManager(gridLayoutManager);
-                    productAdapter.setOnButtonClickListener(UserHomeFragment.this);
+                    productAdapter.setOnButtonClickListener(ProductKategoriFragment.this);
                     binding.rvProduct.setAdapter(productAdapter);
                     binding.rvProduct.setHasFixedSize(true);
                     showProgressBar("sdd", "dsd", false);
@@ -164,27 +146,6 @@ public class UserHomeFragment extends Fragment implements ProductAdapter.OnButto
 
     }
 
-    private void getProfile() {
-        showProgressBar("Loading", "Memuat data...", true);
-       userService.getMyProfile(userId).enqueue(new Callback<UserModel>() {
-           @Override
-           public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-               if (response.isSuccessful() && response.body() != null) {
-                   binding.tvnama.setText("Hai, " +response.body().getName());
-                   showProgressBar("dsds", "Sdsd",false);
-               }else {
-                   showProgressBar("dsds", "Sdsd",false);
-               }
-           }
-
-           @Override
-           public void onFailure(Call<UserModel> call, Throwable t) {
-               showProgressBar("dsds", "Sdsd",false);
-               showToast("error", "Tidak ada koneksi internet");
-
-           }
-       });
-    }
 
 
     public void getTotalCart() {
@@ -242,15 +203,6 @@ public class UserHomeFragment extends Fragment implements ProductAdapter.OnButto
     private void replace(Fragment fragment) {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frameUsers, fragment).addToBackStack(null).commit();
-    }
-
-    private void replaceKategori(String id) {
-        Fragment fragment = new ProductKategoriFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("id", id);
-        fragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frameUsers, fragment).commit();
     }
 
     @Override

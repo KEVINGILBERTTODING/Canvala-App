@@ -105,4 +105,11 @@ public interface UserService {
             @PartMap Map<String, RequestBody> textData,
             @Part MultipartBody.Part image
             );
+
+    @GET("user/getProductByKategori")
+    Call<List<ProductModel>> getProductByKategori(
+            @Query("id") String id
+    );
+
+
 }

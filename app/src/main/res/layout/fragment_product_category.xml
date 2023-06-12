@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".ui.main.user.product.AllProductFragment">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:background="@drawable/wave_main"
+                android:padding="@dimen/_10sdp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Semua Produk"
+                        android:fontFamily="@font/popsem"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp"/>
+
+                    <TextView
+                        android:id="@+id/tvCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Produk pilihan terbaik"
+                        android:fontFamily="@font/popmed"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_9ssp"/>
+
+                    <androidx.appcompat.widget.SearchView
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:queryHint="Cari canvas"
+                        android:id="@+id/searchBar"
+                        app:iconifiedByDefault="false"
+                        android:background="@drawable/container_searchview"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+
+
+
+                <ImageButton
+                    android:layout_width="@dimen/_30sdp"
+                    android:id="@+id/btnCart"
+                    android:layout_height="@dimen/_30sdp"
+                    android:background="@drawable/ic_cart"
+                    android:layout_alignParentRight="true"/>
+
+                <RelativeLayout
+                    android:id="@+id/rl_count_notif"
+                    android:layout_width="wrap_content"
+                    android:padding="@dimen/_2sdp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/container_notification"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_total_notif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/popmed"
+                        android:textSize="@dimen/_8sdp"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Daftar Produk"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:fontFamily="@font/popsem"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"/>
+
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvProduct"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_height="match_parent"/>
+
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+</layout>
