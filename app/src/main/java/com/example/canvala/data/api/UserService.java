@@ -112,4 +112,15 @@ public interface UserService {
     );
 
 
+    @FormUrlEncoded
+    @POST("user/updateProfile")
+    Call<ResponseModel> updateProfile(
+            @Field("user_id") String userId,
+            @Field("password") String password,
+            @Field("nama") String nama,
+            @Field("telepon") String telepon,
+            @Field("kode_pos") String kodePos
+
+    );
+
 }
