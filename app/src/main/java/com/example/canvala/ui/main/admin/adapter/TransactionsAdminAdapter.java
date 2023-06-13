@@ -91,6 +91,8 @@ public class TransactionsAdminAdapter extends RecyclerView.Adapter<TransactionsA
             bundle.putString("kode_pos", transactionsModelList.get(getAdapterPosition()).getPostalCode());
             bundle.putString("alamat", transactionsModelList.get(getAdapterPosition()).getAddress());
             bundle.putString("nama_lengkap", transactionsModelList.get(getAdapterPosition()).getName());
+            bundle.putString("tgl_terima", transactionsModelList.get(getAdapterPosition()).getTimeArrived());
+            bundle.putString("nama_penerima", transactionsModelList.get(getAdapterPosition()).getReceiver());
             bundle.putString("nama_bank", transactionsModelList.get(getAdapterPosition()).getBankName());
             bundle.putString("no_rek", transactionsModelList.get(getAdapterPosition()).getNoRek());
             bundle.putString("rekening_name", transactionsModelList.get(getAdapterPosition()).getRekName());

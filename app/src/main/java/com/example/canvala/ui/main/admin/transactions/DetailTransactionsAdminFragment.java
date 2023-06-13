@@ -100,6 +100,13 @@ public class DetailTransactionsAdminFragment extends Fragment {
             }
         }
 
+        if (getArguments().getString("nama_penerima").equals("")) {
+            binding.lrPenerima.setVisibility(View.GONE);
+        }else {
+            binding.lrPenerima.setVisibility(View.VISIBLE);
+            binding.tvNamaPenerima.setText(getArguments().getString("nama_penerima") + " | " + getArguments().getString("tgl_terima"));
+        }
+
         getTransactionsDetail();
 
 
