@@ -215,7 +215,7 @@
                             android:layout_height="wrap_content"
                             android:padding="@dimen/_7sdp"
                             android:id="@+id/etAlamat"
-                            android:hint="Kode Pos"
+                            android:hint="Alamat"
                             android:lines="4"
                             android:gravity="start"
                             android:fontFamily="@font/popmed"

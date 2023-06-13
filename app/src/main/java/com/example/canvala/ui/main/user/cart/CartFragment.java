@@ -306,8 +306,13 @@ public class CartFragment extends Fragment implements CartAdapter.OnButtonClickL
             @Override
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    String replacedString = response.body().getAddress().replaceAll("<p>|</p>|&nbsp;|\n", "");
-                    binding.etAlamat.setText(replacedString);
+
+                    if (response.body().getAddress() != null) {
+                        String replacedString = response.body().getAddress().replaceAll("<p>|</p>|&nbsp;|\n", "");
+                        binding.etAlamat.setText(replacedString);
+                    }
+
+
                     binding.etTelepon.setText(response.body().getPhoneNumber());
                     binding.etKodePos.setText(response.body().getPostalCode());
                     showProgressBar("dsds", "Sdsd",false);
