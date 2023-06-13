@@ -1,20 +1,12 @@
 package com.example.canvala.ui.main.admin.transactions;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,50 +14,41 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.canvala.R;
+import com.example.canvala.data.api.AdminService;
 import com.example.canvala.data.api.ApiConfig;
 import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.ResponseModel;
-import com.example.canvala.databinding.FragmentDetailTransactionsBelumKonfirmasiBinding;
-import com.example.canvala.databinding.FragmentDetailTransactionsBinding;
-import com.example.canvala.ui.main.user.transactions.TransactionsFragment;
+import com.example.canvala.databinding.FragmentDetailTransactionsAdminBinding;
 import com.example.canvala.util.Constants;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.DecimalFormat;
-import java.util.HashMap;
 
 import es.dmoral.toasty.Toasty;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetailTransactionsBelumKonfirmasiFragment extends Fragment {
-    private EditText etPath;
+public class DetailTransactionsAdminFragment extends Fragment {
     SharedPreferences sharedPreferences;
     UserService userService;
-    private String userId;
-    private File file;
+    AdminService adminService;
     private AlertDialog progressDialog;
     String transaction_id;
 
-    private FragmentDetailTransactionsBelumKonfirmasiBinding binding;
+
+    private FragmentDetailTransactionsAdminBinding binding;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentDetailTransactionsBelumKonfirmasiBinding.inflate(inflater, container, false);
+        binding = FragmentDetailTransactionsAdminBinding.inflate(inflater, container, false);
         sharedPreferences = getContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         userService = ApiConfig.getClient().create(UserService.class);
-        userId = sharedPreferences.getString(Constants.SHARED_PREF_USER_ID, null);
         transaction_id = getArguments().getString("transaction_id");
+        adminService = ApiConfig.getClient().create(AdminService.class);
 
         return binding.getRoot();
     }
@@ -88,12 +71,29 @@ public class DetailTransactionsBelumKonfirmasiFragment extends Fragment {
         getFormatRupiah(binding.tvNominal, getArguments().getString("total"));
         getFormatRupiah(binding.tvTotalPembayaran, getArguments().getString("total"));
 
-        if (getArguments().getString("bukti_tf").equals("")) {
-            binding.btnPesan.setVisibility(View.VISIBLE);
-        }else {
-            binding.btnPesan.setVisibility(View.GONE);
 
+        if (getArguments().getString("bukti_tf").equals("")) {
+            binding.ivBukti.setVisibility(View.GONE);
+            binding.btnPesan.setVisibility(View.GONE);
+        }else {
+            binding.ivBukti.setVisibility(View.VISIBLE);
+            Glide.with(getContext())
+                    .load(Constants.URL_PRODUCT + getArguments().getString("bukti_tf"))
+                    .fitCenter().into(binding.ivBukti);
+
+            if (getArguments().getString("status").equals("BELUM KONFIRMASI")){
+                binding.btnPesan.setText("Konfirmasi");
+
+            }else if (getArguments().getString("status").equals("TERKONFIRMASI")) {
+                binding.btnPesan.setText("Terkirim");
+            }else if (getArguments().getString("status").equals("TERKIRIM")) {
+                binding.btnPesan.setVisibility(View.GONE);
+            }
         }
+
+
+
+
 
         listener();
 
@@ -107,6 +107,34 @@ public class DetailTransactionsBelumKonfirmasiFragment extends Fragment {
 
             }
         });
+
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        binding.ivBukti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new PreviewImageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("image", getArguments().getString("bukti_tf"));
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameAdmin, fragment)
+                        .addToBackStack(null).commit();
+            }
+        });
+
+        if (getArguments().getString("status").equals("BELUM KONFIRMASI")) {
+            binding.btnPesan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    konfirmasi();
+                }
+            });
+        }
     }
 
 
@@ -141,6 +169,30 @@ public class DetailTransactionsBelumKonfirmasiFragment extends Fragment {
         }else {
             Toasty.error(getContext(), text, Toasty.LENGTH_SHORT).show();
         }
+    }
+
+    private void konfirmasi() {
+        showProgressBar("Loading", "Konfirmasi transaksi", true);
+        adminService.konfirmasiTrans(transaction_id).enqueue(new Callback<ResponseModel>() {
+            @Override
+            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                if (response.isSuccessful() && response.body().getStatus() == 200) {
+                    showProgressBar("dsd","sd", false);
+                    showToast("success", "Berhasil konfirmasi transaksi");
+                    getActivity().onBackPressed();
+                }else {
+                    showProgressBar("dsd","sd", false);
+                    showToast("error", "Gagal konfirmasi transaksi");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel> call, Throwable t) {
+                showProgressBar("dsd","sd", false);
+                showToast("error", "Tidak ada koneksi internet");
+
+            }
+        });
     }
 
 }

@@ -30,7 +30,7 @@ public class AdminMainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.menuHome) {
-                    replace(new UserHomeFragment());
+                    replace(new AdminHomeFragment());
                     return true;
                 }else if (item.getItemId() == R.id.menuTransaksi) {
                     replace(new TransactionsFragment());

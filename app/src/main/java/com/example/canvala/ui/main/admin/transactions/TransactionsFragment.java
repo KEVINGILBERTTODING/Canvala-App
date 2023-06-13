@@ -55,7 +55,7 @@ public class TransactionsFragment extends Fragment {
 
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Semua"));
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Belum Konfirmasi"));
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Konfirmasi"));
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Terkonfirmasi"));
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Terkirim"));
 
 
@@ -93,11 +93,11 @@ public class TransactionsFragment extends Fragment {
                     getTransactions("all");
                 }else if (tab.getPosition() == 1) {
                     binding.rvTransactions.setAdapter(null);
-                    getTransactions("Belum Konfirmasi");
+                    getTransactions("BELUM KONFIRMASI");
 
                 }else if (tab.getPosition() == 2) {
                     binding.rvTransactions.setAdapter(null);
-                    getTransactions("KONFIRMASI");
+                    getTransactions("TERKONFIRMASI");
 
                 }else if (tab.getPosition() == 3) {
                     binding.rvTransactions.setAdapter(null);

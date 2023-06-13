@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.canvala.R;
 import com.example.canvala.data.model.TransactionsModel;
-import com.example.canvala.ui.main.admin.transactions.DetailTransactionsBelumKonfirmasiFragment;
+import com.example.canvala.ui.main.admin.transactions.DetailTransactionsAdminFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -81,7 +81,7 @@ public class TransactionsAdminAdapter extends RecyclerView.Adapter<TransactionsA
 
         @Override
         public void onClick(View v) {
-            Fragment fragment = new DetailTransactionsBelumKonfirmasiFragment();
+            Fragment fragment = new DetailTransactionsAdminFragment();
             Bundle bundle = new Bundle();
             bundle.putString("transaction_id", transactionsModelList.get(getAdapterPosition()).getTransactionId());
             bundle.putString("code_transactions", transactionsModelList.get(getAdapterPosition()).getCode());
@@ -99,7 +99,7 @@ public class TransactionsAdminAdapter extends RecyclerView.Adapter<TransactionsA
             bundle.putString("status", transactionsModelList.get(getAdapterPosition()).getTransactionStatus());
             fragment.setArguments(bundle);
             ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frameUsers, fragment).addToBackStack(null).commit();
+                    .replace(R.id.frameAdmin, fragment).addToBackStack(null).commit();
         }
     }
 }
