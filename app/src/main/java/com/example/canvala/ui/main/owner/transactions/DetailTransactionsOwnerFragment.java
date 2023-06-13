@@ -139,7 +139,7 @@ public class DetailTransactionsOwnerFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("image", getArguments().getString("bukti_tf"));
                 fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameAdmin, fragment)
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameOwner, fragment)
                         .addToBackStack(null).commit();
             }
         });

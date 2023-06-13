@@ -28,6 +28,7 @@ import com.example.canvala.data.model.TransactionsModel;
 import com.example.canvala.databinding.FragmentTransactionsAdminBinding;
 import com.example.canvala.databinding.FragmentTransactionsOwnerBinding;
 import com.example.canvala.ui.main.admin.adapter.TransactionsAdminAdapter;
+import com.example.canvala.ui.main.owner.adapter.TransactionsOwnerAdapter;
 import com.example.canvala.util.Constants;
 import com.google.android.material.tabs.TabLayout;
 
@@ -43,7 +44,7 @@ public class TransactionsFragment extends Fragment {
 
     List<TransactionsModel> transactionsModelList;
     LinearLayoutManager linearLayoutManager;
-    TransactionsAdminAdapter transactionsAdminAdapter;
+    TransactionsOwnerAdapter transactionsOwnerAdapter;
     SharedPreferences sharedPreferences;
     AlertDialog progressDialog;
     AdminService adminService;
@@ -140,10 +141,10 @@ public class TransactionsFragment extends Fragment {
                     transactionsModelList = response.body();
                     binding.tvEmpty.setVisibility(View.GONE);
 
-                    transactionsAdminAdapter = new TransactionsAdminAdapter(getContext(), transactionsModelList);
+                    transactionsOwnerAdapter = new TransactionsOwnerAdapter(getContext(), transactionsModelList);
                     linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                     binding.rvTransactions.setLayoutManager(linearLayoutManager);
-                    binding.rvTransactions.setAdapter(transactionsAdminAdapter);
+                    binding.rvTransactions.setAdapter(transactionsOwnerAdapter);
                     binding.rvTransactions.setHasFixedSize(true);
                     showProgressBar("sd", "dssd", false);
                 }else {
@@ -196,11 +197,11 @@ public class TransactionsFragment extends Fragment {
                 filteredList.add(item);
             }
 
-            transactionsAdminAdapter.filter(filteredList);
+            transactionsOwnerAdapter.filter(filteredList);
             if (filteredList.isEmpty()) {
 
             }else {
-                transactionsAdminAdapter.filter(filteredList);
+                transactionsOwnerAdapter.filter(filteredList);
             }
         }
     }
