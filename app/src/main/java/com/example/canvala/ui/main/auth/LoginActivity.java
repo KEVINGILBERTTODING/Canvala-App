@@ -15,6 +15,7 @@ import com.example.canvala.R;
 import com.example.canvala.data.api.ApiConfig;
 import com.example.canvala.data.api.AuthService;
 import com.example.canvala.data.model.AuthModel;
+import com.example.canvala.ui.main.admin.AdminMainActivity;
 import com.example.canvala.ui.main.user.UserMainActivity;
 import com.example.canvala.util.Constants;
 
@@ -50,6 +51,9 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, UserMainActivity.class));
                 finish();
 
+            }else if (sharedPreferences.getString(Constants.SHARED_PREF_ROLE, null).equals("ADMIN")) {
+                startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
+                finish();
             }
         }
 
@@ -88,14 +92,25 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<AuthModel> call, Response<AuthModel> response) {
                 if (response.isSuccessful() && response.body().getStatus() == 200) {
 
-                    editor.putBoolean(Constants.SHARED_PREF_LOGGED, true);
-                    editor.putString(Constants.SHARED_PREF_USER_ID, response.body().getUserId());
-                    editor.putString(Constants.SHARED_PREF_ROLE, response.body().getRole());
-                    editor.apply();
-                    startActivity(new Intent(LoginActivity.this, UserMainActivity.class));
-                    finish();
+                  if (response.body().getRole().equals("USER")) {
+                      editor.putBoolean(Constants.SHARED_PREF_LOGGED, true);
+                      editor.putString(Constants.SHARED_PREF_USER_ID, response.body().getUserId());
+                      editor.putString(Constants.SHARED_PREF_ROLE, response.body().getRole());
+                      editor.apply();
+                      startActivity(new Intent(LoginActivity.this, UserMainActivity.class));
+                      finish();
 
-                    showProgressBar("dsd", "Dsd", false);
+                      showProgressBar("dsd", "Dsd", false);
+                  }else if (response.body().getRole().equals("ADMIN")) {
+                      editor.putBoolean(Constants.SHARED_PREF_LOGGED, true);
+                      editor.putString(Constants.SHARED_PREF_USER_ID, response.body().getUserId());
+                      editor.putString(Constants.SHARED_PREF_ROLE, response.body().getRole());
+                      editor.apply();
+                      startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
+                      finish();
+
+                      showProgressBar("dsd", "Dsd", false);
+                  }
 
                 }else {
                     showProgressBar("sdsd", "sdds", false);
