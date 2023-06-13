@@ -14,14 +14,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Canvala"
+        android:theme="@style/Base.Theme.Canvala"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.main.owner.OwnerMainActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.main.admin.AdminMainActivity"
             android:exported="false"
             android:label="@string/title_activity_admin_main"
-            android:theme="@style/Theme.Canvala" />
+            android:theme="@style/Base.Theme.Canvala" />
         <activity
             android:name=".ui.main.auth.RegisterActivity"
             android:exported="false" />

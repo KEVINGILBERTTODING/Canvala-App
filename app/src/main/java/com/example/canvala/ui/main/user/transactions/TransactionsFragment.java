@@ -76,6 +76,13 @@ public class TransactionsFragment extends Fragment {
                 return false;
             }
         });
+
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     private void getTransactions() {

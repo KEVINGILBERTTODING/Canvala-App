@@ -1,26 +1,24 @@
-package com.example.canvala.ui.main.admin.home;
+package com.example.canvala.ui.main.owner.home;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.canvala.R;
 import com.example.canvala.data.api.ApiConfig;
 import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.UserModel;
 import com.example.canvala.databinding.FragmentAdminHomeFragmnetBinding;
-import com.example.canvala.ui.main.admin.transactions.TransactionsFragment;
-import com.example.canvala.ui.main.auth.LoginActivity;
+import com.example.canvala.databinding.FragmentOwnerHomeFragmnetBinding;
+import com.example.canvala.ui.main.owner.transactions.TransactionsFragment;
 import com.example.canvala.util.Constants;
 
 import es.dmoral.toasty.Toasty;
@@ -28,9 +26,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AdminHomeFragment extends Fragment {
+public class OwnerHomeFragment extends Fragment {
 
-    private FragmentAdminHomeFragmnetBinding binding;
+    private FragmentOwnerHomeFragmnetBinding binding;
     AlertDialog progressDialog;
     UserService userService;
     SharedPreferences sharedPreferences;
@@ -41,7 +39,7 @@ public class AdminHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         binding = FragmentAdminHomeFragmnetBinding.inflate(inflater, container, false);
+         binding = FragmentOwnerHomeFragmnetBinding.inflate(inflater, container, false);
          sharedPreferences = getContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
          userId = sharedPreferences.getString(Constants.SHARED_PREF_USER_ID, null);
          userService = ApiConfig.getClient().create(UserService.class);
@@ -91,7 +89,7 @@ public class AdminHomeFragment extends Fragment {
 
 
     private void replace(Fragment fragment) {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameAdmin, fragment)
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameOwner, fragment)
                 .addToBackStack(null).commit();
 
     }

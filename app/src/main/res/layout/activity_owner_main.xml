@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.admin.AdminMainActivity">
+    tools:context=".ui.main.owner.OwnerMainActivity">
+
 
     <FrameLayout
-        android:id="@+id/frameAdmin"
+        android:id="@+id/frameOwner"
         android:layout_width="match_parent"
         android:layout_above="@id/btmBar"
         android:layout_height="match_parent"/>
@@ -19,6 +20,5 @@
         app:backgroundTint="@color/white"
         android:layout_alignParentBottom="true"
         android:id="@+id/btmBar"/>
-
 
 </RelativeLayout>
