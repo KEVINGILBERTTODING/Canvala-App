@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.canvala.R;
 import com.example.canvala.data.api.ApiConfig;
@@ -25,6 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button btnDaftar;
     AlertDialog progressDialog;
     UserService userService;
+    TextView tvMasuk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         etPassKonfir = findViewById(R.id.etKonfirPass);
         etTelepon = findViewById(R.id.etPhone);
         etEmail = findViewById(R.id.etEmail);
+        tvMasuk = findViewById(R.id.tvMasuk);
         btnDaftar = findViewById(R.id.btnDaftar);
         userService = ApiConfig.getClient().create(UserService.class);
 
@@ -70,6 +73,13 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
 
+        });
+
+        tvMasuk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            }
         });
     }
 

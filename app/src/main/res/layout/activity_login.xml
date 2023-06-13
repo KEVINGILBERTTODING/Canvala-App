@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.auth.LoginActivity">
 
+    <ImageView
+        android:layout_width="@dimen/_160sdp"
+        android:layout_height="@dimen/_160sdp"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/image1"/>
+
 
 
     <LinearLayout
