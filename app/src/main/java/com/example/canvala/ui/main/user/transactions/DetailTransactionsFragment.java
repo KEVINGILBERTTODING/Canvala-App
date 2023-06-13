@@ -14,6 +14,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.provider.OpenableColumns;
 import android.util.Log;
@@ -28,7 +29,9 @@ import com.example.canvala.R;
 import com.example.canvala.data.api.ApiConfig;
 import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.ResponseModel;
+import com.example.canvala.data.model.TransactionsDetailModel;
 import com.example.canvala.databinding.FragmentDetailTransactionsBinding;
+import com.example.canvala.ui.main.admin.adapter.TransactionsDetailAdapter;
 import com.example.canvala.util.Constants;
 
 import java.io.File;
@@ -38,6 +41,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 import okhttp3.MediaType;
@@ -52,6 +56,9 @@ public class DetailTransactionsFragment extends Fragment {
     SharedPreferences sharedPreferences;
     UserService userService;
     private String userId;
+    LinearLayoutManager linearLayoutManager;
+    List<TransactionsDetailModel> transactionsDetailModelList;
+    TransactionsDetailAdapter transactionsDetailAdapter;
     private File file;
     private AlertDialog progressDialog;
     String transaction_id;
@@ -299,6 +306,34 @@ public class DetailTransactionsFragment extends Fragment {
         }else {
             Toasty.error(getContext(), text, Toasty.LENGTH_SHORT).show();
         }
+    }
+
+    private void getTransactionsDetail() {
+        showProgressBar("Loading", "Memuat data....", true);
+        userService.getDetailTransactions(transaction_id).enqueue(new Callback<List<TransactionsDetailModel>>() {
+            @Override
+            public void onResponse(Call<List<TransactionsDetailModel>> call, Response<List<TransactionsDetailModel>> response) {
+                if (response.isSuccessful() && response.body().size() > 0) {
+                    transactionsDetailModelList = response.body();
+                    transactionsDetailAdapter = new TransactionsDetailAdapter(getContext(), transactionsDetailModelList);
+                    linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                    binding.rvProduct.setLayoutManager(linearLayoutManager);
+                    binding.rvProduct.setAdapter(transactionsDetailAdapter);
+                    binding.rvProduct.setHasFixedSize(true);
+                    showProgressBar("Sdd", "Dds", false);
+                }else {
+                    showProgressBar("Sds", "Dsds", false);
+                    showToast("error", "Gagal memuat detail transaksi");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<TransactionsDetailModel>> call, Throwable t) {
+                showProgressBar("Sds", "Dsds", false);
+                showToast("error", "Tidak ada koneksi internet");
+
+            }
+        });
     }
 
 }

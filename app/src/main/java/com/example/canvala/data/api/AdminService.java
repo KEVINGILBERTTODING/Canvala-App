@@ -1,6 +1,7 @@
 package com.example.canvala.data.api;
 
 import com.example.canvala.data.model.ResponseModel;
+import com.example.canvala.data.model.TransactionsDetailModel;
 import com.example.canvala.data.model.TransactionsModel;
 
 import java.util.List;
@@ -24,4 +25,18 @@ public interface AdminService {
     Call<ResponseModel> konfirmasiTrans(
             @Field("trans_id") String transId
     );
+
+    @FormUrlEncoded
+    @POST("admin/terkirimTransaction")
+    Call<ResponseModel> terkirimTransaction(
+            @Field("trans_id") String transId,
+            @Field("penerima") String penerima
+    );
+
+    @GET("admin/getDetailTransactions")
+    Call<List<TransactionsDetailModel>> getDetailTransactions(
+            @Query("trans_id") String transId
+    );
+
+
 }

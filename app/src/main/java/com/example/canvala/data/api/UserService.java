@@ -6,6 +6,7 @@ import com.example.canvala.data.model.InformationModel;
 import com.example.canvala.data.model.ProductModel;
 import com.example.canvala.data.model.RekeningModel;
 import com.example.canvala.data.model.ResponseModel;
+import com.example.canvala.data.model.TransactionsDetailModel;
 import com.example.canvala.data.model.TransactionsModel;
 import com.example.canvala.data.model.UserModel;
 
@@ -122,5 +123,11 @@ public interface UserService {
             @Field("kode_pos") String kodePos
 
     );
+
+    @GET("admin/getDetailTransactions")
+    Call<List<TransactionsDetailModel>> getDetailTransactions(
+            @Query("trans_id") String transId
+    );
+
 
 }

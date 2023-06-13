@@ -1,18 +1,21 @@
 package com.example.canvala.ui.main.admin.transactions;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.canvala.R;
@@ -20,11 +23,14 @@ import com.example.canvala.data.api.AdminService;
 import com.example.canvala.data.api.ApiConfig;
 import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.ResponseModel;
+import com.example.canvala.data.model.TransactionsDetailModel;
 import com.example.canvala.databinding.FragmentDetailTransactionsAdminBinding;
+import com.example.canvala.ui.main.admin.adapter.TransactionsDetailAdapter;
 import com.example.canvala.util.Constants;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
@@ -36,7 +42,10 @@ public class DetailTransactionsAdminFragment extends Fragment {
     UserService userService;
     AdminService adminService;
     private AlertDialog progressDialog;
+    TransactionsDetailAdapter transactionsDetailAdapter;
     String transaction_id;
+    LinearLayoutManager linearLayoutManager;
+    List<TransactionsDetailModel> transactionsDetailModelList;
 
 
     private FragmentDetailTransactionsAdminBinding binding;
@@ -91,6 +100,8 @@ public class DetailTransactionsAdminFragment extends Fragment {
             }
         }
 
+        getTransactionsDetail();
+
 
 
 
@@ -134,6 +145,14 @@ public class DetailTransactionsAdminFragment extends Fragment {
                     konfirmasi();
                 }
             });
+        }else if (getArguments().getString("status").equals("TERKONFIRMASI")) {
+
+                binding.btnPesan.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        terkirim();
+                    }
+                });
         }
     }
 
@@ -193,6 +212,99 @@ public class DetailTransactionsAdminFragment extends Fragment {
 
             }
         });
+
+
+
     }
+
+    private void terkirim (){
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_terkirim);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        EditText etPenerima;
+        Button btnBatal, btnSimpan;
+        etPenerima = dialog.findViewById(R.id.etNamaLengkap);
+        btnSimpan = dialog.findViewById(R.id.btnSimpan);
+        btnBatal = dialog.findViewById(R.id.btnBatal);
+        dialog.show();
+
+        btnBatal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnSimpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etPenerima.getText().toString().isEmpty()) {
+                    etPenerima.setError("Nama penerima tidak boleh kosong");
+                    etPenerima.requestFocus();
+                }else {
+
+                    showProgressBar("Loading", "Konfirmasi transaksi", true);
+                    adminService.terkirimTransaction(transaction_id, etPenerima.getText().toString()).enqueue(new Callback<ResponseModel>() {
+                        @Override
+                        public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                            if (response.isSuccessful() && response.body().getStatus() == 200) {
+                                showProgressBar("dsd","sd", false);
+                                showToast("success", "Berhasil verifikasi penerima");
+                                getActivity().onBackPressed();
+                                dialog.dismiss();
+                            }else {
+                                showProgressBar("dsd","sd", false);
+                                showToast("error", "Gagal verifikasi penerima");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseModel> call, Throwable t) {
+                            showProgressBar("dsd","sd", false);
+                            showToast("error", "Tidak ada koneksi internet");
+
+                        }
+                    });
+
+                }
+            }
+        });
+
+
+
+
+    }
+
+    private void getTransactionsDetail() {
+        showProgressBar("Loading", "Memuat data....", true);
+        adminService.getDetailTransactions(transaction_id).enqueue(new Callback<List<TransactionsDetailModel>>() {
+            @Override
+            public void onResponse(Call<List<TransactionsDetailModel>> call, Response<List<TransactionsDetailModel>> response) {
+                if (response.isSuccessful() && response.body().size() > 0) {
+                    transactionsDetailModelList = response.body();
+                    transactionsDetailAdapter = new TransactionsDetailAdapter(getContext(), transactionsDetailModelList);
+                    linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                    binding.rvProduct.setLayoutManager(linearLayoutManager);
+                    binding.rvProduct.setAdapter(transactionsDetailAdapter);
+                    binding.rvProduct.setHasFixedSize(true);
+                    showProgressBar("Sdd", "Dds", false);
+                }else {
+                    showProgressBar("Sds", "Dsds", false);
+                    showToast("error", "Gagal memuat detail transaksi");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<TransactionsDetailModel>> call, Throwable t) {
+                showProgressBar("Sds", "Dsds", false);
+                showToast("error", "Tidak ada koneksi internet");
+
+            }
+        });
+    }
+
+
+
+
 
 }
