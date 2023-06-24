@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.main.user.transactions.TransactionsFragment">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@drawable/wave_main"
+            android:padding="@dimen/_10sdp"
+            android:id="@+id/rlHeader"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:background="@drawable/baseline_arrow_back_24"
+                android:backgroundTint="@color/white"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_toRightOf="@id/btnBack"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kategori"
+                    android:fontFamily="@font/popsem"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp"/>
+
+                <androidx.appcompat.widget.SearchView
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    app:queryHint="Cari kategori"
+                    android:id="@+id/searchBar"
+                    app:iconifiedByDefault="false"
+                    android:background="@drawable/container_searchview"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_below="@id/rlHeader"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/lr1"
+                    android:layout_height="wrap_content">
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:id="@+id/lrAlamat"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kota"
+                            android:fontFamily="@font/popmed"
+                            android:textColor="@color/black2"
+                            android:textSize="@dimen/_10ssp"/>
+
+                        <Spinner
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:padding="@dimen/_7sdp"
+                            android:id="@+id/spKota"
+                            android:background="@drawable/container_spinner"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No telepon"
+                            android:fontFamily="@font/popmed"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:textColor="@color/black2"
+                            android:textSize="@dimen/_10ssp"/>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_7sdp"
+                            android:id="@+id/etTelepon"
+                            android:hint="Telepon"
+                            android:fontFamily="@font/popmed"
+                            android:textSize="@dimen/_10ssp"
+                            android:inputType="number"
+                            android:background="@drawable/container_spinner"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kode Pos"
+                            android:fontFamily="@font/popmed"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:textColor="@color/black2"
+                            android:textSize="@dimen/_10ssp"/>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_7sdp"
+                            android:id="@+id/etKodePos"
+                            android:hint="Kode Pos"
+                            android:fontFamily="@font/popmed"
+                            android:textSize="@dimen/_10ssp"
+                            android:inputType="number"
+                            android:background="@drawable/container_spinner"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Alamat"
+                            android:fontFamily="@font/popmed"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:textColor="@color/black2"
+                            android:textSize="@dimen/_10ssp"/>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_7sdp"
+                            android:id="@+id/etAlamat"
+                            android:hint="Kode Pos"
+                            android:lines="4"
+                            android:gravity="start"
+                            android:fontFamily="@font/popmed"
+                            android:textSize="@dimen/_10ssp"
+                            android:background="@drawable/container_spinner"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:id="@+id/btnSimpan"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:text="Simpan"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Daftar kategori"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/tv1"
+                    android:fontFamily="@font/popsem"
+                    android:textColor="@color/black2"
+                    android:textSize="@dimen/_12ssp"/>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvKategori"
+                    android:padding="@dimen/_10sdp"
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/tv1"
+                    android:layout_height="wrap_content"/>
+
+
+
+
+
+
+
+
+
+
+
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tidak ada produk"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:fontFamily="@font/popmed"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/_10ssp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:backgroundTint="@color/main"
+            android:src="@drawable/baseline_add_24"
+            android:id="@+id/btnAdd"
+            app:tint="@color/white"/>
+    </RelativeLayout>
+</layout>

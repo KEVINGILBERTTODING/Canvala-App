@@ -23,7 +23,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hai, Alvina Rizqi"
                     android:fontFamily="@font/popmed"
                     android:textColor="@color/white"
                     android:id="@+id/tvnama"
@@ -113,6 +112,7 @@
                         </RelativeLayout>
 
                     </androidx.cardview.widget.CardView>
+
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
