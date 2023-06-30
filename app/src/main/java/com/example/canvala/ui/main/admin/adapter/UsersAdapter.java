@@ -269,7 +269,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         }
     }
     private void showToast(String jenis, String text) {
-        if (jenis.equals("success")) {
+        if (jenis.equals("succ")) {
             Toasty.success(context, text, Toasty.LENGTH_SHORT).show();
         }else {
             Toasty.error(context, text, Toasty.LENGTH_SHORT).show();

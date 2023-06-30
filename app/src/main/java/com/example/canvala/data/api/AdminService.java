@@ -118,5 +118,11 @@ public interface AdminService {
             @Field("roles") String roles
     );
 
+    @FormUrlEncoded
+    @POST("admin/deleteProduct")
+    Call<ResponseModel> deleteProduct(
+            @Field("id") String id
+    );
+
 
 }
