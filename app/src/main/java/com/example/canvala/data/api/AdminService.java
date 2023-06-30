@@ -99,5 +99,11 @@ public interface AdminService {
             @Field("roles") String roles
     );
 
+    @FormUrlEncoded
+    @POST("admin/deleteUsers")
+    Call<ResponseModel> deleteUser(
+            @Field("id") String id
+    );
+
 
 }
