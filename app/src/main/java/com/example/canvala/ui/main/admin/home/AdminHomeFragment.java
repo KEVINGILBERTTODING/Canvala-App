@@ -20,6 +20,7 @@ import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.UserModel;
 import com.example.canvala.databinding.FragmentAdminHomeFragmnetBinding;
 import com.example.canvala.ui.main.admin.Categories.AdminCategoriesFragment;
+import com.example.canvala.ui.main.admin.rekening.AdminRekeningFragment;
 import com.example.canvala.ui.main.admin.transactions.TransactionsFragment;
 import com.example.canvala.ui.main.auth.LoginActivity;
 import com.example.canvala.util.Constants;
@@ -69,6 +70,12 @@ public class AdminHomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 replace(new AdminCategoriesFragment());
+            }
+        });
+        binding.cvMenuRekening.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replace(new AdminRekeningFragment());
             }
         });
     }

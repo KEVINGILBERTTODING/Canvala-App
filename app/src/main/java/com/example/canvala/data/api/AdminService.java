@@ -1,6 +1,7 @@
 package com.example.canvala.data.api;
 
 import com.example.canvala.data.model.CategoriesModel;
+import com.example.canvala.data.model.RekeningModel;
 import com.example.canvala.data.model.ResponseModel;
 import com.example.canvala.data.model.TransactionsDetailModel;
 import com.example.canvala.data.model.TransactionsModel;
@@ -52,6 +53,15 @@ public interface AdminService {
     @POST("admin/insertCategories")
     Call<ResponseModel> insertCategories(
             @Field("category_name") String categoryName
+    );
+
+    @GET("admin/getAllRekening")
+    Call<List<RekeningModel>> getAllRekening();
+
+    @FormUrlEncoded
+    @POST("admin/deleteRekening")
+    Call<ResponseModel> deleteRekening(
+            @Field("id") String id
     );
 
 
