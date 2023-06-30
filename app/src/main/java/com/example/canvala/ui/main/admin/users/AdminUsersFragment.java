@@ -1,4 +1,4 @@
-package com.example.canvala.ui.main.admin.rekening;
+package com.example.canvala.ui.main.admin.users;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,12 +23,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.canvala.R;
 import com.example.canvala.data.api.AdminService;
 import com.example.canvala.data.api.ApiConfig;
-import com.example.canvala.data.model.RekeningModel;
+import com.example.canvala.data.model.UserModel;
 import com.example.canvala.data.model.ResponseModel;
-import com.example.canvala.databinding.FragmentCategoriesAdminBinding;
+import com.example.canvala.data.model.UserModel;
 import com.example.canvala.databinding.FragmentRekeningAdminBinding;
-import com.example.canvala.ui.main.admin.adapter.CategoriesAdapter;
+import com.example.canvala.databinding.FragmentUsersAdminBinding;
 import com.example.canvala.ui.main.admin.adapter.RekeningAdapter;
+import com.example.canvala.ui.main.admin.adapter.UsersAdapter;
 import com.example.canvala.util.Constants;
 
 import java.util.ArrayList;
@@ -37,23 +41,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.Field;
 
-public class AdminRekeningFragment extends Fragment {
+public class AdminUsersFragment extends Fragment {
 
     LinearLayoutManager linearLayoutManager;
-    RekeningAdapter rekeningAdapter;
-    private List<RekeningModel> rekeningModelList;
+    UsersAdapter usersAdapter;
+    private List<UserModel> userModelList;
     SharedPreferences sharedPreferences;
     AlertDialog progressDialog;
     AdminService adminService;
-    String userId;
+    String userId, role;
 
-    private FragmentRekeningAdminBinding binding;
+
+    private FragmentUsersAdminBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentRekeningAdminBinding.inflate(inflater, container, false);
+        binding = FragmentUsersAdminBinding.inflate(inflater, container, false);
         sharedPreferences = getContext().getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         userId = sharedPreferences.getString(Constants.SHARED_PREF_USER_ID, null);
         adminService = ApiConfig.getClient().create(AdminService.class);
@@ -66,7 +71,7 @@ public class AdminRekeningFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getRekening();
+        getAllUsers();
         listener();
 
     }
@@ -88,29 +93,28 @@ public class AdminRekeningFragment extends Fragment {
         binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insertCategories();
+                insertUsers();
 
             }
         });
 
 
-
     }
 
-    private void getRekening() {
+    private void getAllUsers() {
         showProgressBar("Loading", "Memuat data categories", true);
-        adminService.getAllRekening().enqueue(new Callback<List<RekeningModel>>() {
+        adminService.getAllUsers().enqueue(new Callback<List<UserModel>>() {
             @Override
-            public void onResponse(Call<List<RekeningModel>> call, Response<List<RekeningModel>> response) {
+            public void onResponse(Call<List<UserModel>> call, Response<List<UserModel>> response) {
                 if (response.isSuccessful() && response.body().size() > 0) {
-                    rekeningModelList = response.body();
+                    userModelList = response.body();
                     binding.tvEmpty.setVisibility(View.GONE);
 
-                    rekeningAdapter = new RekeningAdapter(getContext(), rekeningModelList);
+                    usersAdapter = new UsersAdapter(getContext(), userModelList);
                     linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                    binding.rvRekening.setLayoutManager(linearLayoutManager);
-                    binding.rvRekening.setAdapter(rekeningAdapter);
-                    binding.rvRekening.setHasFixedSize(true);
+                    binding.rvUser.setLayoutManager(linearLayoutManager);
+                    binding.rvUser.setAdapter(usersAdapter);
+                    binding.rvUser.setHasFixedSize(true);
                     showProgressBar("sd", "dssd", false);
                 }else {
                     binding.tvEmpty.setVisibility(View.VISIBLE);
@@ -119,7 +123,7 @@ public class AdminRekeningFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<RekeningModel>> call, Throwable t) {
+            public void onFailure(Call<List<UserModel>> call, Throwable t) {
                 binding.tvEmpty.setVisibility(View.VISIBLE);
                 showProgressBar("adss", "sdsd", false);
                 showToast("error", "Tidak ada koneksi internet");
@@ -128,18 +132,42 @@ public class AdminRekeningFragment extends Fragment {
         });
     }
 
-    private void insertCategories() {
+    private void insertUsers() {
         Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.layout_insert_rekening);
+        dialog.setContentView(R.layout.layout_insert_user);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         Button btnBatal, btnSimpan;
-        EditText etBankName, etNoRek, etNama;
-        etBankName = dialog.findViewById(R.id.etNamaBank);
-        etNoRek = dialog.findViewById(R.id.etNoRek);
-        etNama = dialog.findViewById(R.id.etNama);
+        EditText etNamaLengkap, etEmail, etTelp, etKodePos, etPassword, etALamat;
+        Spinner spRole;
+        etNamaLengkap = dialog.findViewById(R.id.etNamaLengkap);
+        etEmail = dialog.findViewById(R.id.etEmail);
+        etTelp = dialog.findViewById(R.id.etTelepon);
+        etKodePos = dialog.findViewById(R.id.etKodePos);
+        etPassword = dialog.findViewById(R.id.etPassword);
+        etALamat = dialog.findViewById(R.id.etAlamat);
+        spRole = dialog.findViewById(R.id.spRole);
         btnSimpan = dialog.findViewById(R.id.btnSimpan);
         btnBatal = dialog.findViewById(R.id.btnBatal);
+
+        String [] opsiRole = {"ADMIN", "OWNER", "USER"};
+        ArrayAdapter adapterRole = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, opsiRole);
+        adapterRole.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spRole.setAdapter(adapterRole);
         dialog.show();
+
+        spRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                role = opsiRole[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
 
         btnBatal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,30 +179,39 @@ public class AdminRekeningFragment extends Fragment {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etBankName.getText().toString().isEmpty()) {
-                    etBankName.setError("Tidak boleh kosong");
-                    etBankName.requestFocus();
-                }else  if (etNoRek.getText().toString().isEmpty()) {
-                    etNoRek.setError("Tidak boleh kosong");
-                    etNoRek.requestFocus();
-                }else  if (etNama.getText().toString().isEmpty()) {
-                    etNama.setError("Tidak boleh kosong");
-                    etNama.requestFocus();
-                }
-                else {
+                if (etNamaLengkap.getText().toString().isEmpty()) {
+                    etNamaLengkap.setError("Tidak boleh kosong");
+                    etNamaLengkap.requestFocus();
+                }else if (etEmail.getText().toString().isEmpty()) {
+                    etEmail.setError("Tidak boleh kosong");
+                    etEmail.requestFocus();
+                }else if (etTelp.getText().toString().isEmpty()) {
+                    etTelp.setError("Tidak boleh kosong");
+                    etTelp.requestFocus();
+                }else if (etKodePos.getText().toString().isEmpty()) {
+                    etKodePos.setError("Tidak boleh kosong");
+                    etKodePos.requestFocus();
+                }else if (etPassword.getText().toString().isEmpty()) {
+                    etPassword.setError("Tidak boleh kosong");
+                    etPassword.requestFocus();
+                }else if (etALamat.getText().toString().isEmpty()) {
+                    etALamat.setError("Tidak boleh kosong");
+                    etALamat.requestFocus();
+                } else {
                     showProgressBar("Loading", "Menambahkan kategori baru", true);
-                    adminService.insertRekening(
-                            etBankName.getText().toString(),
-                    etNoRek.getText().toString(),
-                    etNama.getText().toString()
+                    adminService.insertUsers(
+                            etNamaLengkap.getText().toString(),
+                            etEmail.getText().toString(), etPassword.getText().toString(), etALamat.getText().toString(),
+                                    etTelp.getText().toString(), etKodePos.getText().toString(), role
+
                             )
                             .enqueue(new Callback<ResponseModel>() {
                                 @Override
                                 public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                                     showProgressBar("s", "s", false);
                                     if (response.isSuccessful() && response.body().getStatus() == 200) {
-                                        showToast("success", "Berhasil menambahkan rekening baru");
-                                        getRekening();
+                                        showToast("success", "Berhasil menambahkan user baru");
+                                        getAllUsers();
                                         dialog.dismiss();
 
                                     }else {
@@ -225,17 +262,17 @@ public class AdminRekeningFragment extends Fragment {
     }
 
     private void filter(String text) {
-        ArrayList<RekeningModel> filteredList = new ArrayList<>();
-        for (RekeningModel item : rekeningModelList) {
-            if (item.getBankName().toLowerCase().contains(text.toLowerCase())) {
+        ArrayList<UserModel> filteredList = new ArrayList<>();
+        for (UserModel item : userModelList) {
+            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
             }
 
-            rekeningAdapter.filter(filteredList);
+            usersAdapter.filter(filteredList);
             if (filteredList.isEmpty()) {
 
             }else {
-                rekeningAdapter.filter(filteredList);
+                usersAdapter.filter(filteredList);
             }
         }
     }

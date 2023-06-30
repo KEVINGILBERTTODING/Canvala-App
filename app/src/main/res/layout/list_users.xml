@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        app:contentPadding="@dimen/_10sdp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvNamaUsers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="sdsd"
+                    android:layout_toLeftOf="@id/lrAction"
+                    android:fontFamily="@font/popmed"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:textSize="@dimen/_11ssp"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/tvNoTelp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="08232323"
+                    android:layout_below="@id/tvNamaUsers"
+                    android:layout_toLeftOf="@id/lrAction"
+                    android:fontFamily="@font/popmed"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:textSize="@dimen/_11ssp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/main"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lrAction"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
+                    <ImageButton
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
+                        android:background="@drawable/baseline_edit_24"
+                        android:backgroundTint="@color/yellow"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:id="@+id/btnEdit"
+                        android:layout_alignParentRight="true"/>
+                    <ImageButton
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
+                        android:background="@drawable/baseline_delete_24"
+                        android:backgroundTint="@color/red"
+                        android:id="@+id/btnDelete"
+                        android:layout_alignParentRight="true"/>
+
+                </LinearLayout>
+
+
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

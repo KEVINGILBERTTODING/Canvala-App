@@ -5,6 +5,7 @@ import com.example.canvala.data.model.RekeningModel;
 import com.example.canvala.data.model.ResponseModel;
 import com.example.canvala.data.model.TransactionsDetailModel;
 import com.example.canvala.data.model.TransactionsModel;
+import com.example.canvala.data.model.UserModel;
 
 import java.util.List;
 
@@ -71,6 +72,31 @@ public interface AdminService {
             @Field("bank_name") String bank_name,
             @Field("number") String number,
             @Field("rekening_name") String rekening_name
+    );
+
+    @FormUrlEncoded
+    @POST("admin/insertRekening")
+    Call<ResponseModel> insertRekening(
+            @Field("bank_name") String bank_name,
+            @Field("number") String number,
+            @Field("rekening_name") String rekening_name
+    );
+
+
+
+    @GET("admin/getallusers")
+    Call<List<UserModel>> getAllUsers();
+
+    @FormUrlEncoded
+    @POST("admin/insertUsers")
+    Call<ResponseModel> insertUsers(
+            @Field("name") String name,
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("address") String address,
+            @Field("phone_number") String phone_number,
+            @Field("postal_code") String postal_code,
+            @Field("roles") String roles
     );
 
 
