@@ -105,5 +105,18 @@ public interface AdminService {
             @Field("id") String id
     );
 
+    @FormUrlEncoded
+    @POST("admin/updateUsers")
+    Call<ResponseModel> updateUsers(
+            @Field("id") String id,
+            @Field("name") String name,
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("address") String address,
+            @Field("phone_number") String phone_number,
+            @Field("postal_code") String postal_code,
+            @Field("roles") String roles
+    );
+
 
 }

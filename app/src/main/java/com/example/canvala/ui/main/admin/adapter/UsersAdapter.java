@@ -7,7 +7,12 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +38,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     List<UserModel> userModelList;
     private AlertDialog progressDialog;
     private AdminService adminService;
+    private String role;
 
     public UsersAdapter(Context context, List<UserModel> userModelList) {
         this.context = context;
@@ -72,6 +78,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             tvNama = itemView.findViewById(R.id.tvNamaUsers);
             tvNoTelp = itemView.findViewById(R.id.tvNoTelp);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
             adminService = ApiConfig.getClient().create(AdminService.class);
 
             btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +126,126 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     alert.show();
                 }
             });
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Dialog dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.layout_insert_user);
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    Button btnBatal, btnSimpan;
+                    EditText etNamaLengkap, etEmail, etTelp, etKodePos, etPassword, etALamat;
+                    Spinner spRole;
+                    etNamaLengkap = dialog.findViewById(R.id.etNamaLengkap);
+                    etEmail = dialog.findViewById(R.id.etEmail);
+                    etTelp = dialog.findViewById(R.id.etTelepon);
+                    etKodePos = dialog.findViewById(R.id.etKodePos);
+                    etPassword = dialog.findViewById(R.id.etPassword);
+                    etALamat = dialog.findViewById(R.id.etAlamat);
+                    spRole = dialog.findViewById(R.id.spRole);
+                    btnSimpan = dialog.findViewById(R.id.btnSimpan);
+                    btnBatal = dialog.findViewById(R.id.btnBatal);
+
+                    String [] opsiRole = {"ADMIN", "OWNER", "USER"};
+                    ArrayAdapter adapterRole = new ArrayAdapter(context, android.R.layout.simple_spinner_item, opsiRole);
+                    adapterRole.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spRole.setAdapter(adapterRole);
+
+
+                    etNamaLengkap.setText(userModelList.get(getAdapterPosition()).getName());
+                    etEmail.setText(userModelList.get(getAdapterPosition()).getEmail());
+                    etTelp.setText(userModelList.get(getAdapterPosition()).getPhoneNumber());
+                    etKodePos.setText(userModelList.get(getAdapterPosition()).getPostalCode());
+                    etALamat.setText(userModelList.get(getAdapterPosition()).getAddress());
+                    spRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            role = opsiRole[position];
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+                    dialog.show();
+
+
+
+                    btnBatal.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    btnSimpan.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (etNamaLengkap.getText().toString().isEmpty()) {
+                                etNamaLengkap.setError("Tidak boleh kosong");
+                                etNamaLengkap.requestFocus();
+                            }else if (etEmail.getText().toString().isEmpty()) {
+                                etEmail.setError("Tidak boleh kosong");
+                                etEmail.requestFocus();
+                            }else if (etTelp.getText().toString().isEmpty()) {
+                                etTelp.setError("Tidak boleh kosong");
+                                etTelp.requestFocus();
+                            }else if (etKodePos.getText().toString().isEmpty()) {
+                                etKodePos.setError("Tidak boleh kosong");
+                                etKodePos.requestFocus();
+                            }else if (etALamat.getText().toString().isEmpty()) {
+                                etALamat.setError("Tidak boleh kosong");
+                                etALamat.requestFocus();
+                            } else {
+                                showProgressBar("Loading", "Menambahkan kategori baru", true);
+                                adminService.updateUsers(
+                                        userModelList.get(getAdapterPosition()).getUserId(),
+                                                etNamaLengkap.getText().toString(),
+                                                etEmail.getText().toString(), etPassword.getText().toString(), etALamat.getText().toString(),
+                                                etTelp.getText().toString(), etKodePos.getText().toString(), role
+
+                                        )
+                                        .enqueue(new Callback<ResponseModel>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                                                showProgressBar("s", "s", false);
+                                                if (response.isSuccessful() && response.body().getStatus() == 200) {
+                                                    showToast("success", "Berhasil mengubah user");
+                                                    userModelList.get(getAdapterPosition()).setName(etNamaLengkap.getText().toString());
+                                                    userModelList.get(getAdapterPosition()).setEmail(etEmail.getText().toString());
+                                                    userModelList.get(getAdapterPosition()).setAddress(etALamat.getText().toString());
+                                                    userModelList.get(getAdapterPosition()).setPhoneNumber(etTelp.getText().toString());
+                                                    userModelList.get(getAdapterPosition()).setPostalCode(etKodePos.getText().toString());
+                                                    notifyDataSetChanged();
+
+                                                    dialog.dismiss();
+
+                                                }else {
+                                                    showToast("error", "Terjadi keslaahan");
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseModel> call, Throwable t) {
+                                                showProgressBar("s", "s", false);
+                                                showToast("error", "Tidak ada koneksi internet");
+
+
+
+                                            }
+                                        });
+                            }
+                        }
+                    });
+                }
+            });
+
+
+
+
+
         }
     }
 
