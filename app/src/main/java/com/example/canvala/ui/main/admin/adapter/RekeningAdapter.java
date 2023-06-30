@@ -1,11 +1,14 @@
 package com.example.canvala.ui.main.admin.adapter;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -120,6 +123,82 @@ public class RekeningAdapter extends RecyclerView.Adapter<RekeningAdapter.ViewHo
                                 }
                             });
                     alert.show();
+                }
+            });
+
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Dialog dialogUpdate = new Dialog(context);
+                    dialogUpdate.setContentView(R.layout.layout_update_rekening);
+                    dialogUpdate.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    final EditText etNamaBank, etNoRek, etNama;
+                    final Button btnSimpan, btnBatal;
+                    etNamaBank = dialogUpdate.findViewById(R.id.etNamaBank);
+                    etNoRek = dialogUpdate.findViewById(R.id.etNoRek);
+                    etNama = dialogUpdate.findViewById(R.id.etNama);
+                    btnSimpan = dialogUpdate.findViewById(R.id.btnSimpan);
+                    btnBatal = dialogUpdate.findViewById(R.id.btnBatal);
+
+                    etNamaBank.setText(rekeningModelList.get(getAdapterPosition()).getBankName());
+                    etNama.setText(rekeningModelList.get(getAdapterPosition()).getRekeningName());
+                    etNoRek.setText(rekeningModelList.get(getAdapterPosition()).getNumber());
+                    dialogUpdate.show();
+
+                    btnBatal.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogUpdate.dismiss();
+                        }
+                    });
+
+                    btnSimpan.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (etNoRek.getText().toString().isEmpty()) {
+                                etNoRek.setError("Tidak boleh kosong");
+                                etNoRek.requestFocus();
+                            }else if (etNamaBank.getText().toString().isEmpty()) {
+                                etNamaBank.setError("Tidak boleh kosong");
+                                etNamaBank.requestFocus();
+                            }else if (etNama.getText().toString().isEmpty()) {
+                                etNama.setError("Tidak boleh kosong");
+                                etNama.requestFocus();
+                            }else {
+                                showProgressBar("Loading", "Mengubah rekening...", true);
+                                adminService.updateRekening(
+                                        String.valueOf(rekeningModelList.get(getAdapterPosition()).getIdRekening()),
+                                        etNamaBank.getText().toString(),
+                                        etNoRek.getText().toString(),
+                                        etNama.getText().toString()
+
+                                ).enqueue(new Callback<ResponseModel>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
+                                        showProgressBar("s", "s", false);
+                                        if (response.isSuccessful() && response.body().getStatus() == 200) {
+                                            showToast("success", "Berhasil memperbaharui data");
+                                            rekeningModelList.get(getAdapterPosition()).setRekeningName(etNama.getText().toString());
+                                            rekeningModelList.get(getAdapterPosition()).setBankName(etNamaBank.getText().toString());
+                                            rekeningModelList.get(getAdapterPosition()).setNumber(etNoRek.getText().toString());
+                                            notifyDataSetChanged();
+                                            dialogUpdate.dismiss();
+                                        }else {
+                                            showToast("err", "Terjadi kesalahan");
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseModel> call, Throwable t) {
+                                        showProgressBar("s", "s", false);
+                                        showToast("err", "Tidak ada koneksi internet");
+                                    }
+                                });
+
+                            }
+                        }
+                    });
                 }
             });
         }

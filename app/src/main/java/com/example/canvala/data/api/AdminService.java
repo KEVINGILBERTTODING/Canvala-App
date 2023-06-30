@@ -64,5 +64,14 @@ public interface AdminService {
             @Field("id") String id
     );
 
+    @FormUrlEncoded
+    @POST("admin/updateRekening")
+    Call<ResponseModel> updateRekening(
+            @Field("id") String id,
+            @Field("bank_name") String bank_name,
+            @Field("number") String number,
+            @Field("rekening_name") String rekening_name
+    );
+
 
 }
