@@ -80,8 +80,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         String price = decimalFormat.format(productModelList.get(holder.getAdapterPosition()).getPrice());
         holder.tvHarga.setText("Rp. " + price);
 
-
-
         holder.tvStock.setText(productModelList.get(holder.getAdapterPosition()).getStock() + " Stock");
 
         Glide.with(context)
@@ -149,11 +147,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                                         public void onFailure(Call<ResponseModel> call, Throwable t) {
                                             showProgressBar("s", "s", false);
                                             showToast("err", "Tidak ada koneksi internet");
-
-
-
-
-
 
                                         }
                                     });
