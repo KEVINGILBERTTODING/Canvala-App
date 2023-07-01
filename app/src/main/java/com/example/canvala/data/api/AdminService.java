@@ -1,6 +1,7 @@
 package com.example.canvala.data.api;
 
 import com.example.canvala.data.model.CategoriesModel;
+import com.example.canvala.data.model.ProductModel;
 import com.example.canvala.data.model.RekeningModel;
 import com.example.canvala.data.model.ResponseModel;
 import com.example.canvala.data.model.TransactionsDetailModel;
@@ -137,6 +138,26 @@ public interface AdminService {
             @Part MultipartBody.Part image
 
             );
+
+    // update product with image
+    @Multipart
+    @POST("admin/updateProduct")
+    Call<ResponseModel> updateProductImage(
+            @PartMap Map<String, RequestBody> textData,
+            @Part MultipartBody.Part filePart
+    );
+
+    // update product without update image product
+    @Multipart
+    @POST("admin/updateProduct")
+    Call<ResponseModel> updateProduct(
+            @PartMap Map<String, RequestBody> textData
+    );
+
+    @GET("admin/getProductById")
+    Call<ProductModel> getProductById(
+            @Query("id") String id
+    );
 
 
 }

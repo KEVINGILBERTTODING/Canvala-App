@@ -29,6 +29,7 @@ import com.example.canvala.data.api.ApiConfig;
 import com.example.canvala.data.api.UserService;
 import com.example.canvala.data.model.ProductModel;
 import com.example.canvala.data.model.ResponseModel;
+import com.example.canvala.ui.main.admin.product.AdminUpdateProductFragment;
 import com.example.canvala.ui.main.user.product.DetailProductFragment;
 import com.example.canvala.util.Constants;
 
@@ -114,6 +115,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             adminService = ApiConfig.getClient().create(AdminService.class);
             userService = ApiConfig.getClient().create(UserService.class);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
             sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
             userId = sharedPreferences.getString(Constants.SHARED_PREF_USER_ID, null);
 
@@ -167,6 +169,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     alert.show();
 
 
+                }
+            });
+
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment fragment = new AdminUpdateProductFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("product_id", productModelList.get(getAdapterPosition()).getId_product());
+                    fragment.setArguments(bundle);
+                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frameAdmin, fragment).addToBackStack(null)
+                            .commit();
                 }
             });
 

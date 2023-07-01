@@ -72,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    android:id="@+id/btnCart"
+                    android:id="@+id/btnEdit"
                     app:backgroundTint="@color/yellow"
                     android:text="Edit"
                     app:cornerRadius="@dimen/_5sdp"/>
